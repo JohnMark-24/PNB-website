@@ -1,0 +1,3639 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Philippine Trust Company</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Update color scheme with more vibrant options */
+        :root {
+            --primary: #004d99;
+            --primary-light: #0066cc;
+            --secondary: #ffcc00;
+            --secondary-light: #ffd633;
+            --accent: #e63946;
+            --text-dark: #333;
+            --text-light: #777;
+            --background: #f8f9fa;
+            --white: #ffffff;
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            --transition: all 0.3s ease;
+            --border-radius: 12px;
+            --card-border-radius: 15px;
+            /* Add sidebar width variable for better management */
+            --sidebar-width: 250px;
+            --sidebar-collapsed-width: 0px;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        html, body {
+            overflow-x: hidden;
+            max-width: 100%;
+            font-size: 16px;
+        }
+        
+        body {
+            display: flex;
+            min-height: 100vh;
+            background-color: var(--background);
+            color: var(--text-dark);
+        }
+        
+        /* Preloader */
+        .preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--white);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s, visibility 0.5s;
+        }
+        
+        .preloader.fade-out {
+            opacity: 0;
+            visibility: hidden;
+        }
+        
+        .preloader .spinner {
+            width: 60px;
+            height: 60px;
+            border: 5px solid rgba(0, 51, 102, 0.1);
+            border-left-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Sidebar */
+        .sidebar {
+            width: var(--sidebar-width);
+            background: linear-gradient(to bottom, var(--primary), #002244);
+            color: var(--white);
+            padding: 20px 0;
+            height: 100vh;
+            position: fixed;
+            overflow-y: auto;
+            z-index: 100;
+            transition: var(--transition);
+            box-shadow: var(--shadow);
+            left: 0;
+        }
+        
+        .sidebar.collapsed {
+            width: var(--sidebar-collapsed-width);
+            padding: 0;
+            overflow: hidden;
+            left: calc(-1 * var(--sidebar-width));
+        }
+        
+        .sidebar .logo {
+            text-align: center;
+            padding: 0 20px 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            transition: var(--transition);
+        }
+        
+        .sidebar.collapsed .logo {
+            padding: 15px 5px;
+        }
+        
+        .sidebar .logo img {
+            max-width: 150px;
+            transition: var(--transition);
+        }
+        
+        .sidebar.collapsed .logo img {
+            max-width: 40px;
+            border-radius: 50%;
+        }
+        
+        .sidebar.collapsed .logo h3,
+        .sidebar.collapsed .menu a span {
+            display: none;
+        }
+        
+        /* Update toggle-sidebar button to stay fixed */
+        .toggle-sidebar {
+            position: fixed;
+            top: 20px;
+            left: 20px; /* Fixed position on the left side */
+            width: 30px;
+            height: 30px;
+            background-color: var(--primary);
+            border-radius: 50%;
+            display: none !important; /* Ensure it's hidden */
+            justify-content: center;
+            align-items: center;
+            color: var(--white);
+            cursor: pointer;
+            box-shadow: var(--shadow);
+            z-index: 102; /* Higher z-index to ensure it stays on top */
+            transition: var(--transition);
+        }
+        
+        /* When sidebar is visible, move toggle button to the side */
+        .sidebar:not(.collapsed) ~ .toggle-sidebar {
+            display: none; /* Hide in all cases */
+        }
+        
+        .toggle-sidebar:hover {
+            background-color: var(--primary-light);
+        }
+        
+        /* .sidebar .menu {
+            padding: 20px;
+        } */
+        
+        .sidebar .menu a {
+            display: flex;
+            align-items: center;
+            color: var(--white);
+            text-decoration: none;
+            padding: 14px 18px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            position: relative;
+            transition: all 0.4s ease;
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.05);
+        }
+        
+        .sidebar .menu a:before {
+            content: "";
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 0;
+            height: 3px;
+            background-color: var(--secondary);
+            transition: var(--transition);
+        }
+        
+        .sidebar .menu a:hover {
+            background-color: rgba(255, 255, 255, 0.15);
+            transform: translateX(8px);
+        }
+        
+        .sidebar .menu a:hover:before {
+            width: 100%;
+        }
+        
+        .sidebar .menu a.active {
+            background-color: rgba(255, 255, 255, 0.2);
+            font-weight: 600;
+            padding-left: 22px;
+        }
+        
+        .sidebar .menu a i {
+            margin-right: 15px;
+            font-size: 18px;
+            min-width: 20px;
+            text-align: center;
+            transition: var(--transition);
+            color: var(--secondary);
+        }
+        
+        .sidebar.collapsed .menu a {
+            padding: 15px;
+            text-align: center;
+            justify-content: center;
+        }
+        
+        .sidebar.collapsed .menu a i {
+            margin-right: 0;
+            font-size: 20px;
+        }
+        
+        /* Content */
+        .content {
+            flex: 1;
+            margin-left: var(--sidebar-width);
+            transition: var(--transition);
+            background: var(--background);
+            width: calc(100% - var(--sidebar-width));
+            box-sizing: border-box;
+        }
+        
+        .content.expanded {
+            margin-left: var(--sidebar-collapsed-width);
+            width: 100%;
+        }
+        
+        /* Scroll to top button */
+        .scroll-top {
+            position: fixed;
+            bottom: -60px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: var(--primary);
+            color: var(--white);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            z-index: 99;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            opacity: 0;
+        }
+        
+        .scroll-top.active {
+            bottom: 30px;
+            opacity: 1;
+        }
+        
+        .scroll-top:hover {
+            background-color: var(--primary-light);
+            transform: translateY(-5px);
+        }
+        
+        /* Section Styling - MODIFIED FOR SINGLE PAGE APP */
+        section {
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+            margin-bottom: 20px;
+            padding: 40px 30px;
+            min-height: calc(100vh - 100px); /* Make sections full height */
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            scroll-margin-top: 20px;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s, transform 0.8s;
+            position: relative;
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            display: none; /* Hide all sections by default */
+        }
+        
+        section.active {
+            display: block; /* Show only active section */
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary), var(--primary-light));
+        }
+        
+        section h2 {
+            position: relative;
+            margin-bottom: 50px;
+            color: var(--primary);
+            font-size: 1.8rem;
+            font-weight: 700;
+            text-align: center;
+        }
+        
+        section h2:after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            border-radius: 4px;
+        }
+        
+        h1, h2, h3, h4{
+            margin-bottom: 20px;
+            color: black;
+            transition: var(--transition);
+        }
+        
+        h3 {
+        color: rgb(0, 0, 0);
+            position: relative;
+            display: inline-block;
+            margin-bottom: 25px;
+          
+            font-weight: 600;
+            font-size: 1.5rem;
+        }
+        
+        h3:after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--secondary), var(--primary-light));
+            border-radius: 3px;
+            transition: width 0.4s ease;
+        }
+        
+        h3:hover:after {
+            width: 100%;
+        }
+        
+        /* Header Image */
+        .header-image {
+            width: 100%;
+            height: auto;
+            max-height: 350px;
+            object-fit: cover;
+            margin-bottom: 25px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            transition: all 0.5s ease;
+            filter: brightness(1.05) contrast(1.05);
+        }
+        
+        .header-image:hover {
+            transform: scale(1.02);
+            filter: brightness(1.1) contrast(1.1);
+        }
+        
+        /* Card Styling */
+        .card {
+            background-color: var(--white);
+            border-radius: var(--card-border-radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            margin-bottom: 20px;
+            border: none;
+            position: relative;
+        }
+        
+        .card:hover {
+            transform: translateY(-12px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+        }
+        
+        .card-header {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: var(--white);
+            padding: 25px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 1.2rem;
+            letter-spacing: 0.5px;
+        }
+        
+        .card-body {
+            padding: 20px;
+        }
+        
+        /* Button Styling */
+        .btn {
+            display: inline-block;
+            padding: 14px 32px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: var(--white);
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            transition: all 0.4s ease;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0, 77, 153, 0.3);
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+        
+        .btn:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: 0.6s;
+            z-index: -1;
+        }
+        
+        .btn:hover:before {
+            left: 100%;
+        }
+        
+        .btn:hover {
+            background: linear-gradient(135deg, var(--primary-light), var(--primary));
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 77, 153, 0.4);
+        }
+        
+        /* Profile Container */
+        .profile-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 25px;
+            justify-content: center;
+        }
+        
+        .profile-card {
+            width: calc(33.333% - 25px);
+            border-radius: var(--card-border-radius);
+            overflow: hidden;
+            background-color: var(--white);
+            box-shadow: var(--shadow);
+            transition: all 0.5s ease;
+            margin-bottom: 25px;
+            position: relative;
+            z-index: 1;
+            border: none;
+        }
+        
+        .profile-card:hover {
+            transform: translateY(-15px) scale(1.03);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+        
+        .profile-card img {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            transition: all 0.5s ease;
+        }
+        
+        .profile-card:hover img {
+            transform: scale(1.08);
+        }
+        
+        .profile-card .details {
+            padding: 30px;
+            position: relative;
+            background: var(--white);
+            transition: all 0.3s ease;
+        }
+        
+        .profile-card .details:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 0;
+            background: linear-gradient(to bottom, var(--secondary), var(--primary));
+            transition: height 0.5s ease;
+        }
+        
+        .profile-card:hover .details:before {
+            height: 100%;
+        }
+        
+        .profile-card .details h3 {
+            margin-left: 15px;
+            transition: var(--transition);
+        }
+        
+        .profile-card:hover .details h3 {
+            color: var(--primary);
+            margin-left: 20px;
+        }
+        
+        /* Team Section */
+        .team-section .team-member {
+            display: flex;
+            margin-bottom: 40px;
+            padding: 35px;
+            border-radius: var(--card-border-radius);
+            background-color: var(--white);
+            box-shadow: var(--shadow);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            border: none;
+        }
+        
+        .team-section .team-member:hover {
+            transform: translateY(-12px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+        }
+        
+        .team-section .team-member:before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 5px;
+            background: linear-gradient(to bottom, var(--secondary), var(--primary));
+            transition: width 0.5s ease;
+        }
+        
+        .team-section .team-member:hover:before {
+            width: 10px;
+        }
+        
+        .team-section .team-member img {
+            width: 200px;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 50%;
+            margin-right: 35px;
+            border: 6px solid rgba(0, 77, 153, 0.1);
+            transition: all 0.4s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .team-section .team-member:hover img {
+            border-color: var(--secondary);
+            transform: rotate(5deg) scale(1.05);
+        }
+        
+        /* Animations and Effects */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        /* Responsive design */
+        @media (max-width: 1200px) {
+            html, body {
+                font-size: 15px;
+            }
+            
+            .profile-card {
+                width: calc(50% - 20px);
+            }
+        }
+        
+        @media (max-width: 992px) {
+            .sidebar {
+                width: var(--sidebar-collapsed-width);
+                left: calc(-1 * var(--sidebar-width));
+            }
+            
+            .sidebar.mobile-active {
+                width: var(--sidebar-width);
+                padding: 20px 0;
+                left: 0;
+            }
+            
+            .content {
+                margin-left: 0;
+                width: 100%;
+            }
+            
+            .toggle-sidebar {
+                display: none;
+            }
+            
+            .mobile-nav-toggle {
+                display: block;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            html, body {
+                font-size: 14px;
+            }
+            
+            section {
+                padding: 30px 0;
+            }
+            
+            .profile-card {
+                width: 100%;
+            }
+            
+            .team-section .team-member {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+                padding: 20px;
+            }
+            
+            .team-section .team-member img {
+                width: 150px;
+                height: 150px;
+                margin-right: 0;
+                margin-bottom: 15px;
+            }
+            
+            .header-image {
+                height: 250px;
+            }
+            
+            section h2 {
+                font-size: 1.8rem;
+            }
+            
+            .feature-container {
+                gap: 15px;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .content {
+                padding: 15px;
+            }
+            
+            section {
+                padding: 25px 0;
+            }
+            
+            .grid-container {
+                gap: 15px;
+            }
+        }
+        
+        /* Additional styles from the existing sections */
+        /* ... [keep all other styles for specialized sections] ... */
+
+        /* Add styling for paragraphs */
+        p {
+            line-height: 1.6;
+            margin-bottom: 15px;
+            color: var(--text-dark);
+            font-size: 0.95rem;
+        }
+
+        /* Add enhanced styling for the tagline */
+        .tagline {
+            font-size: 1.4rem;
+            color: var(--primary);
+            text-align: center;
+            margin-bottom: 30px;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            position: relative;
+            padding-bottom: 15px;
+        }
+
+        .tagline:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            border-radius: 3px;
+        }
+
+        /* Enhance lists for better readability */
+        ul {
+            padding-left: 20px;
+            margin-bottom: 25px;
+        }
+
+        ul li {
+            margin-bottom: 12px;
+            position: relative;
+            padding-left: 15px;
+            line-height: 1.7;
+        }
+
+        ul li::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 10px;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background-color: var(--secondary);
+        }
+
+        /* Add subtle hover effects to sections */
+        section:hover {
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12);
+        }
+
+        /* Add grid layout for better content organization */
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .grid-item {
+            background-color: var(--white);
+            border-radius: var(--card-border-radius);
+            padding: 30px;
+            box-shadow: var(--shadow);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .grid-item:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.12);
+        }
+
+        .grid-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 4px;
+            background-color: var(--secondary);
+            transition: all 0.3s ease;
+        }
+
+        .grid-item:hover::before {
+            width: 7px;
+        }
+
+        /* Add styled info boxes */
+        .info-box {
+            background: linear-gradient(135deg, rgba(0, 77, 153, 0.05), rgba(255, 204, 0, 0.05));
+            padding: 25px;
+            border-radius: var(--card-border-radius);
+            margin: 30px 0;
+            position: relative;
+            border-left: 4px solid var(--primary);
+        }
+
+        .info-box h4 {
+            color: var(--primary);
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+
+        /* Create timeline style for history content */
+        .timeline {
+            position: relative;
+            margin: 30px 0;
+            padding-left: 20px;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 3px;
+            background: linear-gradient(to bottom, var(--primary), var(--secondary));
+            border-radius: 3px;
+        }
+
+        .timeline-item {
+            position: relative;
+            padding-bottom: 20px;
+            padding-left: 15px;
+        }
+
+        .timeline-item:last-child {
+            padding-bottom: 0;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -25px;
+            top: 5px;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background-color: var(--secondary);
+            border: 4px solid var(--white);
+            box-shadow: 0 0 0 3px rgba(0, 77, 153, 0.2);
+        }
+
+        .timeline-item .date {
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+
+        /* Add accent backgrounds for important info */
+        .accent-bg {
+            background: linear-gradient(135deg, rgba(0, 77, 153, 0.05), rgba(255, 204, 0, 0.05));
+            padding: 25px;
+            border-radius: var(--card-border-radius);
+            margin: 25px 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .accent-bg::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+        }
+
+        /* Enhance the home section specifically */
+        #home {
+            position: relative;
+            padding-top: 30px;
+            text-align: center;
+        }
+
+        #home h1 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin: 20px 0;
+            position: relative;
+            display: inline-block;
+        }
+
+        #home h1::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            border-radius: 4px;
+        }
+
+        /* Add styling for feature boxes */
+        .feature-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .feature-box {
+            flex: 1;
+            min-width: 200px;
+            background-color: var(--white);
+            border-radius: var(--card-border-radius);
+            padding: 20px;
+            box-shadow: var(--shadow);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+        }
+
+        .feature-box:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.12);
+        }
+
+        .feature-box i {
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 15px;
+            transition: all 0.4s ease;
+        }
+
+        .feature-box:hover i {
+            color: var(--secondary);
+            transform: scale(1.1);
+        }
+
+        .feature-box h4 {
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .feature-box p {
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        /* Add styling for the preloader */
+        .preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--white), var(--background));
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.8s, visibility 0.8s;
+        }
+
+        .preloader.fade-out {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .preloader .spinner {
+            width: 60px;
+            height: 60px;
+            border: 5px solid rgba(0, 77, 153, 0.1);
+            border-left-color: var(--primary);
+            border-top-color: var(--secondary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        /* Add scroll animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .scroll-top {
+            position: fixed;
+            bottom: -60px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: var(--white);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            z-index: 99;
+            box-shadow: 0 5px 15px rgba(0, 77, 153, 0.3);
+            transition: all 0.5s ease;
+            opacity: 0;
+        }
+
+        .scroll-top.active {
+            bottom: 30px;
+            opacity: 1;
+        }
+
+        .scroll-top:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 10px 25px rgba(0, 77, 153, 0.4);
+        }
+
+        /* Let's enhance other sections with our new styling */
+
+        /* Add Core Values back with improved styling */
+        #core-values {
+            position: relative;
+            padding-top: 40px;
+            text-align: center;
+        }
+
+        #core-values h2 {
+            color: var(--primary);
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 50px;
+            position: relative;
+        }
+
+        #core-values h2:after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            border-radius: 4px;
+        }
+
+        #core-values .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        #core-values .grid-item {
+            background-color: var(--white);
+            border-radius: var(--card-border-radius);
+            padding: 30px;
+            box-shadow: var(--shadow);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        #core-values .grid-item:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.12);
+        }
+
+        #core-values .grid-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 4px;
+            background-color: var(--secondary);
+            transition: all 0.3s ease;
+        }
+
+        #core-values .grid-item:hover::before {
+            width: 7px;
+        }
+
+        #core-values .grid-item h4 {
+            color: var(--primary);
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+
+        #core-values .grid-item p {
+            line-height: 1.8;
+            margin-bottom: 20px;
+            color: var(--text-dark);
+            font-size: 1.05rem;
+        }
+
+        /* Update the Goals section */
+        #goals {
+            position: relative;
+            padding-top: 40px;
+            text-align: center;
+        }
+
+        #goals h2 {
+            color: var(--primary);
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 50px;
+            position: relative;
+        }
+
+        #goals h2:after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            border-radius: 4px;
+        }
+
+        #goals .feature-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 25px;
+            margin-top: 40px;
+        }
+
+        #goals .feature-box {
+            flex: 1;
+            min-width: 250px;
+            background-color: var(--white);
+            border-radius: var(--card-border-radius);
+            padding: 30px;
+            box-shadow: var(--shadow);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+        }
+
+        #goals .feature-box:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.12);
+        }
+
+        #goals .feature-box i {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 20px;
+            transition: all 0.4s ease;
+        }
+
+        #goals .feature-box:hover i {
+            color: var(--secondary);
+            transform: scale(1.1);
+        }
+
+        #goals .feature-box h4 {
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        #goals .info-box {
+            background: linear-gradient(135deg, rgba(0, 77, 153, 0.05), rgba(255, 204, 0, 0.05));
+            padding: 40px;
+            border-radius: var(--card-border-radius);
+            margin: 30px 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        #goals .info-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+        }
+
+        #goals .info-box h4 {
+            color: var(--primary);
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+
+        #goals .info-box p {
+            line-height: 1.8;
+            margin-bottom: 20px;
+            color: var(--text-dark);
+            font-size: 1.05rem;
+        }
+
+        /* Update the Branches section with modern layout */
+        #branches {
+            position: relative;
+            padding-top: 40px;
+            text-align: center;
+        }
+
+        #branches h2 {
+            color: var(--primary);
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 50px;
+            position: relative;
+        }
+
+        #branches h2:after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            border-radius: 4px;
+        }
+
+        #branches .accent-bg {
+            background: linear-gradient(135deg, rgba(0, 77, 153, 0.05), rgba(255, 204, 0, 0.05));
+            padding: 40px;
+            border-radius: var(--card-border-radius);
+            margin: 30px 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        #branches .accent-bg::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+        }
+
+        #branches .card {
+            background-color: var(--white);
+            border-radius: var(--card-border-radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            margin-bottom: 30px;
+            border: none;
+            position: relative;
+        }
+
+        #branches .card:hover {
+            transform: translateY(-12px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+        }
+
+        #branches .card-header {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: var(--white);
+            padding: 25px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 1.2rem;
+            letter-spacing: 0.5px;
+        }
+
+        #branches .card-body {
+            padding: 30px;
+        }
+
+        #branches .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        #branches .grid-item {
+            background-color: var(--white);
+            border-radius: var(--card-border-radius);
+            padding: 20px;
+            box-shadow: var(--shadow);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        #branches .grid-item:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.12);
+        }
+
+        #branches .grid-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 4px;
+            background-color: var(--secondary);
+            transition: all 0.3s ease;
+        }
+
+        #branches .grid-item:hover::before {
+            width: 7px;
+        }
+
+        #branches .grid-item h4 {
+            color: var(--primary);
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+
+        #branches .grid-item p {
+            line-height: 1.8;
+            margin-bottom: 20px;
+            color: var(--text-dark);
+            font-size: 1.05rem;
+        }
+
+        /* Update the Products section with modern card styling */
+        #products {
+            position: relative;
+            padding-top: 40px;
+            text-align: center;
+        }
+
+        #products h2 {
+            color: var(--primary);
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 50px;
+            position: relative;
+        }
+
+        #products h2:after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            border-radius: 4px;
+        }
+
+        #products .accent-bg {
+            background: linear-gradient(135deg, rgba(0, 77, 153, 0.05), rgba(255, 204, 0, 0.05));
+            padding: 40px;
+            border-radius: var(--card-border-radius);
+            margin: 30px 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        #products .accent-bg::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+        }
+
+        #products .feature-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 25px;
+            margin-top: 40px;
+        }
+
+        #products .feature-box {
+            flex: 1;
+            min-width: 250px;
+            background-color: var(--white);
+            border-radius: var(--card-border-radius);
+            padding: 30px;
+            box-shadow: var(--shadow);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+        }
+
+        #products .feature-box:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.12);
+        }
+
+        #products .feature-box i {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 20px;
+            transition: all 0.4s ease;
+        }
+
+        #products .feature-box:hover i {
+            color: var(--secondary);
+            transform: scale(1.1);
+        }
+
+        #products .feature-box h4 {
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        #products .info-box {
+            background: linear-gradient(135deg, rgba(0, 77, 153, 0.05), rgba(255, 204, 0, 0.05));
+            padding: 40px;
+            border-radius: var(--card-border-radius);
+            margin: 30px 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        #products .info-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+        }
+
+        #products .info-box h4 {
+            color: var(--primary);
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+
+        #products .info-box p {
+            line-height: 1.8;
+            margin-bottom: 20px;
+            color: var(--text-dark);
+            font-size: 1.05rem;
+        }
+
+        /* Add CSS styling for a scrolling announcement banner */
+        .announcement-banner {
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: var(--white);
+            padding: 8px 0;
+            overflow: hidden;
+            position: relative;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow);
+            border-radius: var(--border-radius);
+        }
+
+        .announcement-text {
+            display: inline-block;
+            white-space: nowrap;
+            animation: scroll-left 25s linear infinite;
+            padding-left: 100%;
+        }
+
+        @keyframes scroll-left {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-100%); }
+        }
+
+        /* Add styling for a call-to-action button */
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--secondary), #ffdd33);
+            color: var(--primary);
+            font-weight: 700;
+            padding: 12px 25px;
+            border-radius: 50px;
+            text-decoration: none;
+            box-shadow: 0 5px 15px rgba(255, 204, 0, 0.3);
+            transition: all 0.4s ease;
+            margin-top: 20px;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(255, 204, 0, 0.4);
+        }
+
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            transition: 0.6s;
+            z-index: -1;
+        }
+
+        .cta-button:hover::before {
+            left: 100%;
+        }
+
+        /* Add a centered container for call-to-action */
+        .cta-container {
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+            text-align: center;
+            margin-top: 30px;
+            margin-bottom: 30px;
+        }
+
+        /* Add styling for board, management and other sections */
+        /* Board of Directors Section */
+        .board-container {
+            margin-top: 30px;
+        }
+
+        .board-section {
+            margin-bottom: 40px;
+            background-color: var(--white);
+            border-radius: var(--card-border-radius);
+            padding: 25px;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+        }
+
+        .board-section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.12);
+        }
+
+        .board-section h3 {
+            color: var(--primary);
+            font-size: 1.4rem;
+            margin-bottom: 20px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .board-section h3:after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--secondary), var(--primary-light));
+            border-radius: 3px;
+            transition: width 0.3s ease;
+        }
+
+        .board-card {
+            background-color: var(--white);
+            border-radius: var(--card-border-radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .board-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .board-card .header {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: var(--white);
+            padding: 15px 20px;
+        }
+
+        .board-card .content {
+            padding: 20px;
+        }
+
+        .board-card .content img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 5px;
+            margin-top: 15px;
+        }
+
+        .board-stats {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin: 25px 0;
+        }
+
+        .stat-box {
+            flex: 1;
+            min-width: 150px;
+            background-color: var(--white);
+            border-radius: var(--card-border-radius);
+            padding: 20px;
+            box-shadow: var(--shadow);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .stat-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            color: var(--text-dark);
+            font-size: 0.9rem;
+        }
+
+        /* Management Committee Section */
+        .management-container {
+            margin-top: 30px;
+        }
+
+        .executives-section, .committees-section {
+            margin-bottom: 40px;
+            background-color: var(--white);
+            border-radius: var(--card-border-radius);
+            padding: 25px;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+        }
+
+        .executives-section:hover, .committees-section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.12);
+        }
+
+        .executive-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .executive-card {
+            display: flex;
+            align-items: center;
+            background-color: var(--white);
+            border-radius: var(--card-border-radius);
+            padding: 15px;
+            box-shadow: var(--shadow);
+            width: calc(50% - 15px);
+            min-width: 250px;
+            transition: all 0.3s ease;
+        }
+
+        .executive-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .executive-card img {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 15px;
+            border: 3px solid rgba(0, 77, 153, 0.1);
+        }
+
+        .executive-name {
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .executive-title {
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+
+        .committee-card {
+            background-color: var(--white);
+            border-radius: var(--card-border-radius);
+            padding: 20px;
+            box-shadow: var(--shadow);
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .committee-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .committee-name {
+            color: var(--primary);
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .committee-members {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .committee-member {
+            font-size: 0.9rem;
+        }
+
+        .member-role {
+            font-weight: 600;
+            color: var(--primary);
+            margin-right: 5px;
+        }
+
+        /* Capital Structure Section */
+        .capital-container {
+            margin-top: 30px;
+        }
+
+        .capital-section {
+            margin-bottom: 40px;
+            background-color: var(--white);
+            border-radius: var(--card-border-radius);
+            padding: 25px;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+        }
+
+        .capital-section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.12);
+        }
+
+        .capital-heading {
+            color: var(--primary);
+            font-size: 1.4rem;
+            margin-bottom: 20px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .capital-heading .emoji {
+            margin-right: 10px;
+        }
+
+        .capital-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .capital-label {
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .capital-value {
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .ownership-chart {
+            height: 30px;
+            background-color: var(--primary);
+            border-radius: 15px;
+            position: relative;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+
+        .ownership-foreign {
+            position: absolute;
+            right: 0;
+            top: 0;
+            height: 100%;
+            width: 0.5%;
+            background-color: var(--secondary);
+            text-align: right;
+            padding-right: 10px;
+            font-size: 0.8rem;
+            color: var(--text-dark);
+        }
+
+        .ownership-label {
+            line-height: 30px;
+            color: var(--white);
+            padding-left: 15px;
+            font-size: 0.9rem;
+        }
+
+        /* Governance Section */
+        .governance-container {
+            margin-top: 30px;
+        }
+
+        .governance-card {
+            background-color: var(--white);
+            border-radius: var(--card-border-radius);
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+        }
+
+        .governance-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.12);
+        }
+
+        .governance-heading {
+            color: var(--primary);
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .governance-heading .emoji {
+            margin-right: 10px;
+        }
+
+        .governance-heading:after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--secondary), var(--primary-light));
+            border-radius: 3px;
+            transition: width 0.3s ease;
+        }
+
+        .governance-heading:hover:after {
+            width: 100%;
+        }
+
+        .documents-list {
+            margin: 20px 0;
+        }
+
+        .resource-link {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: var(--white);
+            padding: 10px 20px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            margin-top: 15px;
+        }
+
+        .resource-link:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        /* CSR Section */
+        .csr-container {
+            margin-top: 30px;
+        }
+
+        .csr-intro {
+            background-color: var(--white);
+            border-radius: var(--card-border-radius);
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+        }
+
+        .csr-intro:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.12);
+        }
+
+        .csr-quote {
+            font-style: italic;
+            font-weight: 500;
+            color: var(--primary);
+            margin: 20px 0;
+            padding: 15px;
+            border-left: 4px solid var(--secondary);
+            background-color: rgba(0, 77, 153, 0.05);
+            border-radius: 5px;
+        }
+
+        .csr-initiatives {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 25px 0;
+        }
+
+        .csr-card {
+            background-color: var(--white);
+            border-radius: var(--card-border-radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+        }
+
+        .csr-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.12);
+        }
+
+        .csr-card-header {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: var(--white);
+            padding: 15px;
+            font-weight: 600;
+        }
+
+        .csr-card-body {
+            padding: 20px;
+        }
+
+        .csr-footer {
+            background-color: var(--white);
+            border-radius: var(--card-border-radius);
+            padding: 20px;
+            margin-top: 30px;
+            box-shadow: var(--shadow);
+        }
+
+        /* Financial Statements Section */
+        .financial-container {
+            margin-top: 30px;
+        }
+
+        .year-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .year-tab {
+            padding: 10px 20px;
+            background-color: var(--white);
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .year-tab:hover {
+            background-color: rgba(0, 77, 153, 0.1);
+        }
+
+        .year-tab.active {
+            background-color: var(--primary);
+            color: var(--white);
+        }
+
+        .year-content {
+            display: none;
+            background-color: var(--white);
+            border-radius: var(--card-border-radius);
+            padding: 25px;
+            box-shadow: var(--shadow);
+        }
+
+        .year-content.active {
+            display: block;
+        }
+
+        .financial-metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .metric-box {
+            background-color: rgba(0, 77, 153, 0.05);
+            border-radius: 10px;
+            padding: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .metric-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .metric-name {
+            font-size: 0.9rem;
+            color: var(--text-dark);
+            margin-bottom: 10px;
+        }
+
+        .metric-value {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+
+        .metric-change {
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .metric-change.positive {
+            color: #28a745;
+        }
+
+        .metric-change.negative {
+            color: #dc3545;
+        }
+
+        .performance-summary {
+            margin: 25px 0;
+            padding: 15px;
+            background-color: rgba(0, 77, 153, 0.05);
+            border-radius: 5px;
+            border-left: 4px solid var(--primary);
+        }
+
+        .report-link {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: var(--white);
+            padding: 10px 20px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            margin-top: 15px;
+        }
+
+        .report-link:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .access-reports {
+            margin-top: 40px;
+            background-color: var(--white);
+            border-radius: var(--card-border-radius);
+            padding: 25px;
+            box-shadow: var(--shadow);
+        }
+
+        .reports-list {
+            margin: 15px 0;
+        }
+
+        .reports-list li {
+            margin-bottom: 10px;
+        }
+
+        .reports-list a {
+            color: var(--primary);
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .reports-list a:hover {
+            color: var(--secondary);
+            text-decoration: underline;
+        }
+
+        /* Add these new styles */
+        .page-spinner {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100px;
+            margin: 30px 0;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, visibility 0.3s;
+        }
+
+        .page-spinner.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .page-spinner .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(0, 51, 102, 0.1);
+            border-left-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        .page-controls {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .page-button {
+            padding: 10px 20px;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            transition: var(--transition);
+        }
+
+        .page-button:hover {
+            background-color: var(--primary-light);
+            transform: translateY(-2px);
+        }
+
+        .page-button i {
+            margin-right: 8px;
+        }
+
+        .page-button.next i {
+            margin-right: 0;
+            margin-left: 8px;
+        }
+
+        .page-button.prev {
+            background-color: var(--text-light);
+        }
+
+        .page-button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Initial state for home section */
+        #home {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <!-- Preloader -->
+    <div class="preloader">
+        <div class="spinner"></div>
+    </div>
+    
+    <!-- Mobile Nav Toggle -->
+    <div class="mobile-nav-toggle">
+        <i class="fas fa-bars"></i>
+    </div>
+    
+    <!-- Sidebar Navigation -->
+    <div class="sidebar">
+        <!-- Remove this toggle button line
+        <div class="toggle-sidebar">
+            <i class="fas fa-chevron-left"></i>
+        </div>
+        -->
+        
+        <div class="logo">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS8xyiv_LjBw3rC4vSqrfWx1zmgRuqg0TNL4g&s" alt="Philippine Trust Company Logo">
+            <h3>Philippine Trust Company</h3>
+        </div>
+        
+        <div class="menu">
+            <a href="#home" class="active"><i class="fas fa-home"></i> <span>Home</span></a>
+            <a href="#background"><i class="fas fa-history"></i> <span>Background</span></a>
+            <a href="#corporate-profile"><i class="fas fa-building"></i> <span>Corporate Profile</span></a>
+            <a href="#vision-mission"><i class="fas fa-eye"></i> <span>Vision & Mission</span></a>
+            <a href="#branches"><i class="fas fa-map-marker-alt"></i> <span>Branches</span></a>
+            <a href="#scope"><i class="fas fa-briefcase"></i> <span>Business Scope</span></a>
+            <a href="#products"><i class="fas fa-dollar-sign"></i> <span>Products</span></a>
+            <a href="#highlights"><i class="fas fa-chart-line"></i> <span>Highlights</span></a>
+            <a href="#awards"><i class="fas fa-trophy"></i> <span>Awards</span></a>
+            <a href="#structure"><i class="fas fa-sitemap"></i> <span>Structure</span></a>
+            <a href="#board"><i class="fas fa-users"></i> <span>Board</span></a>
+            <a href="#management"><i class="fas fa-user-tie"></i> <span>Management</span></a>
+            <a href="#capital"><i class="fas fa-coins"></i> <span>Capital</span></a>
+            <a href="#governance"><i class="fas fa-balance-scale"></i> <span>Governance</span></a>
+            <a href="#csr"><i class="fas fa-hands-helping"></i> <span>CSR</span></a>
+            <a href="#financial"><i class="fas fa-file-invoice-dollar"></i> <span>Financials</span></a>
+            <a href="#team"><i class="fas fa-user-friends"></i> <span>Team</span></a>
+            <a href="#references"><i class="fas fa-book"></i> <span>References</span></a>
+            <a href="#disclaimer"><i class="fas fa-exclamation-circle"></i> <span>Disclaimer</span></a>
+        </div>
+    </div>
+    
+    <!-- Main Content -->
+    <div class="content">
+        <!-- Add announcement banner -->
+        <div class="announcement-banner">
+            <div class="announcement-text">
+                <strong>ANNOUNCEMENT:</strong> New digital banking features now available! &nbsp;&nbsp;&nbsp; 
+                <strong>NEWS:</strong> Philtrust Bank celebrates over 100 years of service excellence &nbsp;&nbsp;&nbsp;
+                <strong>PROMO:</strong> Special interest rates for new time deposits until December 31 &nbsp;&nbsp;&nbsp;
+            </div>
+        </div>
+
+        <!-- Home Section -->
+        <section id="home" class="animate">
+            <img src="https://c8.alamy.com/comp/F5FJAJ/manila-philippines-june-7-2015-philtrust-bank-establishment-formally-F5FJAJ.jpg" alt="Bank Building" class="header-image">
+            <h1>Philippine Trust Company</h1>
+            <p class="tagline">"Your Trusted Bank"</p>
+            
+            <div class="feature-container">
+                <div class="feature-box">
+                    <i class="fas fa-shield-alt"></i>
+                    <h4>Security</h4>
+                    <p>Your finances protected with our conservative banking approach</p>
+                </div>
+                
+                <div class="feature-box">
+                    <i class="fas fa-history"></i>
+                    <h4>Heritage</h4>
+                    <p>Over a century of trusted banking experience</p>
+                </div>
+                
+                <div class="feature-box">
+                    <i class="fas fa-globe"></i>
+                    <h4>Reach</h4>
+                    <p>Nationwide branch network for your convenience</p>
+                </div>
+            </div>
+            
+            
+        </section>
+        
+        <!-- Background Section -->
+        <section id="background">
+            <h2>Background & History</h2>
+            
+            <div class="accent-bg">
+                <p>Philtrust Bank, officially known as the Philippine Trust Company, is one of the oldest private universal banks in the Philippines. Established on October 21, 1916, it began operations with an initial authorized capital of ₱1 million, half of which was paid up.</p>
+            </div>
+            
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="date">1916</div>
+                    <p>Philtrust Bank was established on October 21, with its first office located at Calle T. Pinpin in Escolta, Manila. It was the first in the country to offer estate administration and guardianship services, marking its pioneering role in trust operations.</p>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="date">Post-World War I</div>
+                    <p>The bank was entrusted by the United States Veterans Administration to manage the guardianship of deceased veterans' children. It also served as the depository for the United States Armed Forces stationed in the Philippines, including General Douglas MacArthur and the Philippine Scouts.</p>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="date">1978</div>
+                    <p>Don Emilio T. Yap acquired controlling interest in the bank from the Roman Catholic Archbishop of Manila. Under his leadership, Philtrust Bank continued its conservative banking approach, emphasizing the protection of depositors' funds.</p>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="date">1988</div>
+                    <p>The bank was listed on the Makati and Manila Stock Exchanges, marking an important milestone in its corporate history.</p>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="date">2007</div>
+                    <p>Philtrust Bank was granted a universal banking license by the Bangko Sentral ng Pilipinas, expanding its capabilities and service offerings.</p>
+                </div>
+            </div>
+            
+            <div class="info-box">
+                <h4>Head Office</h4>
+            <p>Philtrust Bank Building<br>
+            United Nations Avenue corner San Marcelino Street<br>
+            Manila, Metro Manila, Philippines</p>
+            
+            <p>The head office is situated in the Ermita district of Manila and serves as the central hub for the bank's operations.</p>
+            </div>
+            <div class="references">
+                <p><small>Source: <a href="https://www.philtrustbank.com/" target="_blank">Philtrust Bank Website</a></small></p>
+            </div>
+            <div class="page-controls">
+                <button class="page-button prev" id="background-prev"><i class="fas fa-arrow-left"></i> Previous</button>
+                <button class="page-button next" id="background-next">Next <i class="fas fa-arrow-right"></i></button>
+            </div>
+            
+        </section>
+        
+        <!-- Corporate Profile Section -->
+        <section id="corporate-profile">
+            <h2>Corporate Profile</h2>
+            
+            <p>Philtrust Bank, officially known as the Philippine Trust Company (PSE: PTC), is a publicly listed universal bank in the Philippines. Established in 1916, it stands as one of the country's oldest private banks, renowned for its conservative banking approach and emphasis on safeguarding depositors' funds.</p>
+            
+            <div class="grid-container">
+                <div class="grid-item">
+                    <i class="fas fa-handshake" style="font-size: 2rem; color: var(--primary); margin-bottom: 15px;"></i>
+                    <h4>Services</h4>
+                    <p>The bank offers a comprehensive suite of financial services, including domestic and international banking, trust services, and investment management.</p>
+                </div>
+                
+                <div class="grid-item">
+                    <i class="fas fa-users" style="font-size: 2rem; color: var(--primary); margin-bottom: 15px;"></i>
+                    <h4>Clientele</h4>
+                    <p>Its clientele encompasses retail, middle-market, and corporate customers, all benefiting from a network of branches and ATMs across the nation.</p>
+                </div>
+                
+                <div class="grid-item">
+                    <i class="fas fa-building" style="font-size: 2rem; color: var(--primary); margin-bottom: 15px;"></i>
+                    <h4>Subsidiaries</h4>
+                    <p>The bank's Articles of Incorporation authorize it to invest in the equity of allied and non-allied corporations, allowing engagement in various business undertakings.</p>
+                </div>
+            </div>
+            
+            <div class="info-box">
+                <h4>Ownership Structure</h4>
+                <p>The bank's ownership structure includes significant stakes held by entities such as Philtrust Realty Corporation and Orient Enterprises. These affiliations suggest involvement in real estate and other business ventures, aligning with the bank's strategic interests.</p>
+            </div>
+            <div class="references">
+                <p><small>Source: <a href="https://www.philtrustbank.com/" target="_blank">Philtrust Bank Website</a></small></p>
+            </div>
+            <div class="page-controls">
+                <button class="page-button prev" id="corporate-profile-prev"><i class="fas fa-arrow-left"></i> Previous</button>
+                <button class="page-button next" id="corporate-profile-next">Next <i class="fas fa-arrow-right"></i></button>
+            </div>
+        </section>
+        
+        <!-- Vision & Mission Section -->
+        <section id="vision-mission">
+            <h2>Vision, Mission, Goals and Core Values</h2>
+            
+            <div class="accent-bg">
+                <p>Philtrust Bank's vision and mission are guided by the principle that "<strong>Whomever much is given, much is expected.</strong>" The bank and its management embrace a philosophy that emphasizes responsibility, integrity, and service.</p>
+            </div>
+            
+            <div class="feature-container">
+                <div class="feature-box">
+                    <i class="fas fa-infinity"></i>
+                    <h4>Enduring Legacy</h4>
+                    <p>The business of banking is forever.</p>
+                </div>
+                
+                <div class="feature-box">
+                    <i class="fas fa-balance-scale"></i>
+                    <h4>Accountability</h4>
+                    <p>Banks, as stewards of private and public wealth, are accountable not only to their clientele, the public, and regulators but primarily to God, the source of all riches.</p>
+                </div>
+                
+                <div class="feature-box">
+                    <i class="fas fa-handshake"></i>
+                    <h4>Public Trust</h4>
+                    <p>The authority of a bank is a public trust.</p>
+                </div>
+            </div>
+            
+            <p style="text-align: center; margin-top: 30px;">These principles are embedded in the bank's corporate culture and administration, emphasizing strong governance, public credibility, transparency, and accountability.</p>
+              <div class="references">
+                <p><small>Source: <a href="https://www.philtrustbank.com/bank-info/mission-vision-and-values" target="_blank">Philtrust Bank Website</a></small></p>
+            </div>
+            <div class="page-controls">
+                <button class="page-button prev" id="vision-mission-prev"><i class="fas fa-arrow-left"></i> Previous</button>
+                <button class="page-button next" id="vision-mission-next">Next <i class="fas fa-arrow-right"></i></button>
+            </div>
+        </section>
+        
+        <!-- Branches Section -->
+        <section id="branches">
+            <h2>Branch Network</h2>
+            
+            <div class="accent-bg">
+                <p>Philtrust Bank operates a network of branches strategically located across the Philippines, ensuring convenient access for customers nationwide.</p>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <i class="fas fa-map-marker-alt" style="margin-right: 10px;"></i> Metro Manila Branches
+                </div>
+                <div class="card-body">
+                    <div class="grid-container" style="grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));">
+                        <div class="grid-item" style="padding: 20px;">
+                            <h4>Manila</h4>
+                            <p>Philtrust Bank Building<br>United Nations Ave. cor. San Marcelino St.</p>
+            </div>
+            
+                        <div class="grid-item" style="padding: 20px;">
+                            <h4>Binondo</h4>
+                            <p>Quintin Paredes St.<br>Binondo, Manila</p>
+            </div>
+            
+                        <div class="grid-item" style="padding: 20px;">
+                            <h4>Caloocan</h4>
+                            <p>Rizal Avenue Extension<br>Caloocan City</p>
+            </div>
+            
+                        <div class="grid-item" style="padding: 20px;">
+                            <h4>Makati</h4>
+                            <p>Ayala Avenue<br>Makati City</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" style="margin-top: 30px;">
+                <div class="card-header">
+                    <i class="fas fa-map-marker-alt" style="margin-right: 10px;"></i> Provincial Branches
+                </div>
+                <div class="card-body">
+                    <div class="grid-container" style="grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));">
+                        <div class="grid-item" style="padding: 20px;">
+                            <h4>Cebu</h4>
+                            <p>Osmena Boulevard<br>Cebu City</p>
+                        </div>
+                        
+                        <div class="grid-item" style="padding: 20px;">
+                            <h4>Davao</h4>
+                            <p>C.M. Recto Street<br>Davao City</p>
+                        </div>
+                        
+                        <div class="grid-item" style="padding: 20px;">
+                            <h4>Iloilo</h4>
+                            <p>General Luna Street<br>Iloilo City</p>
+                        </div>
+                        
+                        <div class="grid-item" style="padding: 20px;">
+                            <h4>Bacolod</h4>
+                            <p>Lacson Street<br>Bacolod City</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+             <div class="references">
+                <p><small>Source: <a href="https://www.philtrustbank.com/branch-locator" target="_blank">Philtrust Bank Website</a></small></p>
+            </div>
+            <div class="page-controls">
+                <button class="page-button prev" id="branches-prev"><i class="fas fa-arrow-left"></i> Previous</button>
+                <button class="page-button next" id="branches-next">Next <i class="fas fa-arrow-right"></i></button>
+            </div>
+        </section>
+        
+        <!-- Business Scope Section -->
+        <section id="scope">
+            <h2>Scope of Business/Operation</h2>
+            <p>Philtrust Bank (Philippine Trust Company) operates as a universal bank in the Philippines, providing a wide range of financial and banking services to meet the needs of its diverse clientele, including individuals, businesses, and government institutions.</p>
+            
+            <h3>1. Core Services</h3>
+            <div>
+                <h4>Retail Banking</h4>
+                <ul>
+                    <li>Deposit services (savings, checking, time deposits)</li>
+                    <li>Consumer loans (auto loans, housing loans, personal loans)</li>
+                </ul>
+            </div>
+            
+            <div>
+                <h4>Commercial and Corporate Banking</h4>
+                <ul>
+                    <li>Corporate loans and credit lines</li>
+                    <li>Trade finance and treasury services</li>
+                    <li>Cash management services</li>
+                </ul>
+            </div>
+            
+            <div>
+                <h4>Trust and Investment Services</h4>
+                <ul>
+                    <li>Estate planning and guardianship</li>
+                    <li>Fund management</li>
+                    <li>Investment advisory services</li>
+                </ul>
+            </div>
+            
+            <div>
+                <h4>International Banking</h4>
+                <ul>
+                    <li>Foreign exchange and remittance services</li>
+                    <li>Letters of credit and foreign trade finance</li>
+                </ul>
+            </div>
+            
+            <h3>2. Operational Reach</h3>
+            <div>
+                <h4>Nationwide Branch Network:</h4>
+                <p>Over 40 branches across Metro Manila and key provinces including Isabela, Cagayan de Oro, and more.</p>
+            </div>
+            
+            <div>
+                <h4>ATM Network:</h4>
+                <p>Linked to local ATM networks such as BancNet for broader accessibility.</p>
+            </div>
+            
+            <div>
+                <h4>Head Office Operations:</h4>
+                <p>Located at United Nations Avenue corner San Marcelino Street, Ermita, Manila – the main control center for management, planning, and strategic operations.</p>
+            </div>
+            
+            <h3>3. Regulatory Scope</h3>
+            <p>Philtrust Bank operates under the regulatory framework of the Bangko Sentral ng Pilipinas (BSP) and complies with laws governing universal banking. It is also publicly listed under the Philippine Stock Exchange (PSE: PTC), further ensuring transparency and public accountability.</p>
+            
+            <h3>4. Investment and Subsidiary Scope</h3>
+            <p>Authorized to invest in both allied and non-allied enterprises.</p>
+            <p>Engaged in ventures such as real estate through Philtrust Realty Corporation and other affiliates, enhancing its financial service offerings.</p>
+            
+            <h3>Summary</h3>
+            <p>The scope of Philtrust Bank's operations spans traditional and modern banking services, national branch reach, trust and investment solutions, and affiliations with strategic business entities—making it a significant player in the Philippine financial industry.</p>
+            <div class="references">
+                <p><small>Source: <a href="https://www.philtrustbank.com/" target="_blank">Philtrust Bank Website</a></small></p>
+            </div>
+            <div class="page-controls">
+                <button class="page-button prev" id="scope-prev"><i class="fas fa-arrow-left"></i> Previous</button>
+                <button class="page-button next" id="scope-next">Next <i class="fas fa-arrow-right"></i></button>
+            </div>
+        </section>
+        
+        <!-- Products & Services Section -->
+        <section id="products">
+            <h2>Products and Services</h2>
+            
+            <div class="accent-bg">
+                <p>Philtrust Bank offers a comprehensive range of banking products and services designed to meet the diverse financial needs of individuals, businesses, and institutions.</p>
+            </div>
+            
+            <div class="feature-container">
+                <div class="feature-box">
+                    <i class="fas fa-piggy-bank"></i>
+                    <h4>Deposit Accounts</h4>
+                    <ul style="text-align: left; padding-left: 0;">
+                        <li style="list-style: none; padding-left: 0;">Savings Accounts</li>
+                        <li style="list-style: none; padding-left: 0;">Checking Accounts</li>
+                        <li style="list-style: none; padding-left: 0;">Time Deposits</li>
+                </ul>
+            </div>
+            
+                <div class="feature-box">
+                    <i class="fas fa-hand-holding-usd"></i>
+                    <h4>Loans</h4>
+                    <ul style="text-align: left; padding-left: 0;">
+                        <li style="list-style: none; padding-left: 0;">Commercial Loans</li>
+                        <li style="list-style: none; padding-left: 0;">Real Estate Loans</li>
+                        <li style="list-style: none; padding-left: 0;">Personal Loans</li>
+                </ul>
+            </div>
+            
+                <div class="feature-box">
+                    <i class="fas fa-exchange-alt"></i>
+                    <h4>Remittance</h4>
+                    <ul style="text-align: left; padding-left: 0;">
+                        <li style="list-style: none; padding-left: 0;">Domestic Transfers</li>
+                        <li style="list-style: none; padding-left: 0;">International Remittance</li>
+                        <li style="list-style: none; padding-left: 0;">Bills Payment</li>
+                </ul>
+            </div>
+            
+                <div class="feature-box">
+                    <i class="fas fa-shield-alt"></i>
+                    <h4>Trust Services</h4>
+                    <ul style="text-align: left; padding-left: 0;">
+                        <li style="list-style: none; padding-left: 0;">Investment Management</li>
+                        <li style="list-style: none; padding-left: 0;">Estate Planning</li>
+                        <li style="list-style: none; padding-left: 0;">Corporate Trust Services</li>
+                </ul>
+            </div>
+            </div>
+            
+            <div class="info-box" style="margin-top: 40px;">
+                <h4>Digital Banking</h4>
+                <p>Access your accounts anytime, anywhere with Philtrust Bank's secure online and mobile banking platforms. Enjoy convenient features including fund transfers, bill payments, balance inquiries, and more.</p>
+            </div>
+              <div class="references">
+                <p><small>Source: <a href="https://www.philtrustbank.com/services/other-services" target="_blank">Philtrust Bank Website</a></small></p>
+            </div>
+            <div class="page-controls">
+                <button class="page-button prev" id="products-prev"><i class="fas fa-arrow-left"></i> Previous</button>
+                <button class="page-button next" id="products-next">Next <i class="fas fa-arrow-right"></i></button>
+            </div>
+        </section>
+        
+        <!-- Operational Highlights Section -->
+        <section id="highlights">
+            <h2>Operational/Financial Highlights</h2>
+            <p>Philtrust Bank (Philippine Trust Company) demonstrated consistent financial performance in 2023, maintaining its reputation for conservative banking practices and robust capital adequacy. Below are the key operational and financial highlights:</p>
+            
+            <h3>Financial Performance (as of December 31, 2023)</h3>
+            <div class="highlights-container">
+                <ul>
+                    <li><strong>Net Interest Income:</strong> ₱3.17 billion</li>
+                    <li><strong>Gross Revenue:</strong> ₱10.57 billion</li>
+                    <li><strong>Net Income:</strong> ₱1.03 billion</li>
+                    <li><strong>Total Assets:</strong> ₱176.44 billion</li>
+                    <li><strong>Total Liabilities:</strong> ₱153.26 billion</li>
+                    <li><strong>Total Equity:</strong> ₱23.18 billion</li>
+                    <li><strong>Capital Adequacy Ratio (CAR):</strong> 43.29%</li>
+                    <li><strong>Leverage Ratio:</strong> 12.42%</li>
+                </ul>
+            </div>
+            
+            <h3>Operational Highlights</h3>
+            <div class="highlights-container">
+                <ul>
+                    <li><strong>Branch Network:</strong> 61 branches nationwide, including the Head Office</li>
+                    <li><strong>Business Segments:</strong>
+                        <ul>
+                            <li>Treasury Operations: Accounted for approximately 76% of total revenues</li>
+                            <li>Lending Operations: Contributed around 24% of total revenues</li>
+                        </ul>
+                    </li>
+                    <li><strong>Loan Portfolio:</strong> Predominantly commercial loans, comprising about 99% of total loans</li>
+                    <li><strong>Investment Securities:</strong> Held investment securities amounting to ₱107.99 billion at amortized cost and ₱19.48 billion at fair value through other comprehensive income (FVOCI), representing approximately 72.25% of total assets</li>
+                    <li><strong>Compliance:</strong> Fully compliant with Bangko Sentral ng Pilipinas (BSP) regulations, including capital requirements and leverage ratios</li>
+                </ul>
+            </div>
+            
+            <div class="references">
+                <p><small>Source: <a href="https://www.philtrustbank.com/sites/default/files/company-disclosure/AFS-2023.pdf" target="_blank">Philtrust Bank Annual Financial Statement 2023</a> | <a href="https://www.philtrustbank.com/sites/default/files/company-disclosure/Annual%20Report%20%28SEC%20Form%2017-A%29%20for%20the%20year%20ended%20December%2031%2C%202023.pdf" target="_blank">Philtrust Bank Annual Report 2023</a></small></p>
+            </div>
+            
+            <div class="page-controls">
+                <button class="page-button prev" id="highlights-prev"><i class="fas fa-arrow-left"></i> Previous</button>
+                <button class="page-button next" id="highlights-next">Next <i class="fas fa-arrow-right"></i></button>
+            </div>
+        </section>
+        
+        <!-- Awards Section -->
+        <section id="awards">
+            <h2>Awards and Recognitions</h2>
+            <h3>Last 5 Years</h3>
+            <p>Philtrust Bank (Philippine Trust Company) has been recognized for its commitment to reliable banking services. One notable accolade is the Highest Transaction Completion Rate award from BancNet during its 20th anniversary celebration. This award highlights Philtrust Bank's dedication to efficient and dependable ATM network operations.</p>
+            
+            <div class="award-item">
+                <h4>BancNet Highest Transaction Completion Rate Award</h4>
+                <p>During BancNet's 20th anniversary celebration, Philtrust Bank was honored for having the highest transaction completion rate among member banks. The event was held at the InterContinental Hotel in Makati City with Bangko Sentral ng Pilipinas (BSP) Governor Amado Tetangco, Jr. as the guest of honor.</p>
+                <p>The award was received by VP George Castro, representing Philtrust Bank at the ceremony, which recognized top-performing ATM networks and largest transaction volumes over a five-year period.</p>
+            </div>
+            
+            <p>While specific awards for Philtrust Bank in the past five years are limited in public records, the bank continues to uphold its reputation for conservative banking practices and dedication to customer service. The bank's consistent performance in maintaining high standards of service reliability demonstrates its commitment to excellence in the banking industry.</p>
+            
+            <div class="references">
+                <p><small>Source: <a href="https://philtrustbank.com/philtrust-bank-gets-bancnet-award" target="_blank">Philtrust Bank official website</a></small></p>
+            </div>
+             <div class="references">
+                <p><small>Source: <a href="https://www.philtrustbank.com/" target="_blank">Philtrust Bank Website</a></small></p>
+            </div>
+            <div class="page-controls">
+                <button class="page-button prev" id="awards-prev"><i class="fas fa-arrow-left"></i> Previous</button>
+                <button class="page-button next" id="awards-next">Next <i class="fas fa-arrow-right"></i></button>
+            </div>
+        </section>
+        
+        <!-- Organizational Structure Section -->
+        <section id="structure">
+            <h2>Organizational Structure</h2>
+            <p>The Philippine Trust Company (PhilTrust Bank) is one of the oldest private universal banks in the Philippines. The bank follows a hierarchical and functional organizational model typical of universal banks in the country.</p>
+            
+            <!-- Visual Organizational Chart -->
+            <div class="org-chart">
+                <!-- Board Level -->
+                <div class="org-box level-1">Board of Directors</div>
+                <div class="connector"></div>
+                
+                <!-- Executive Management -->
+                <div class="org-box level-2">Executive Management<br>(President & CEO)</div>
+                <div class="connector"></div>
+                <div class="horizontal-line"></div>
+                
+                <!-- Functional Departments -->
+                <div class="department-boxes">
+                    <div class="org-box level-3">Retail Banking</div>
+                    <div class="org-box level-3">Corporate Banking</div>
+                    <div class="org-box level-3">Trust Services</div>
+                    <div class="org-box level-3">Treasury</div>
+                    <div class="org-box level-3">Credit Operations</div>
+                    <div class="org-box level-3">Internal Audit</div>
+                    <div class="org-box level-3">Legal & Compliance</div>
+                    <div class="org-box level-3">IT & Digital Banking</div>
+                    <div class="org-box level-3">Human Resources</div>
+                    <div class="org-box level-3">Marketing</div>
+                </div>
+                
+                <div class="connector"></div>
+                
+                <!-- Branch Network -->
+                <div class="org-box level-4">Branch Network</div>
+            </div>
+            
+            <!-- Detailed Information -->
+            <div class="detailed-info">
+                <h3>1. Board of Directors</h3>
+                <p>The highest governing body of the bank, responsible for policy-making, overall corporate governance, and strategic direction. Includes the Chairman of the Board, Vice Chairman, and other Board Members (usually composed of seasoned professionals and business leaders).</p>
+                
+                <h3>2. Executive Management</h3>
+                <p>Led by the President and Chief Executive Officer (CEO), who oversees daily operations and implements the board's directives.</p>
+                
+                <p><strong>Key Executive Positions:</strong></p>
+                <ul>
+                    <li>President & CEO</li>
+                    <li>Chief Operating Officer (COO) – handles operational functions</li>
+                    <li>Chief Finance Officer (CFO) – manages the financial health and reporting</li>
+                    <li>Chief Risk Officer (CRO) – manages risk governance</li>
+                    <li>Chief Compliance Officer (CCO) – ensures regulatory and legal compliance</li>
+                </ul>
+                
+                <h3>3. Functional Departments</h3>
+                <p>Each department is led by a Vice President (VP), Assistant VP, or Department Head, depending on the size and importance.</p>
+                
+                <p><strong>Common Departments:</strong></p>
+                <ul>
+                    <li><strong>Retail Banking</strong> – Branch operations, customer accounts</li>
+                    <li><strong>Corporate Banking</strong> – Business loans and large accounts</li>
+                    <li><strong>Trust and Investment Services</strong> – Wealth management and fiduciary services</li>
+                    <li><strong>Treasury Department</strong> – Investment, liquidity, and asset-liability management</li>
+                    <li><strong>Credit and Loan Operations</strong> – Credit assessments, loan servicing</li>
+                    <li><strong>Internal Audit</strong> – Independent auditing and evaluation of internal controls</li>
+                    <li><strong>Legal and Compliance</strong> – Legal affairs and regulatory compliance</li>
+                    <li><strong>IT and Digital Banking</strong> – Infrastructure, cybersecurity, digital transformation</li>
+                    <li><strong>Human Resources</strong> – Talent management and organizational development</li>
+                    <li><strong>Marketing and Communications</strong> – Branding, PR, and customer engagement</li>
+                </ul>
+                
+                <h3>4. Branch Network</h3>
+                <p>Regional or Area Managers oversee clusters of bank branches. Each branch is managed by a Branch Manager, who supervises tellers, customer service personnel, and marketing officers.</p>
+            </div>
+              <div class="references">
+                <p><small>Source: <a href="https://www.philtrustbank.com/bank-info/organizational-chart" target="_blank">Philtrust Bank Website</a></small></p>
+            </div>
+            <div class="page-controls">
+                <button class="page-button prev" id="structure-prev"><i class="fas fa-arrow-left"></i> Previous</button>
+                <button class="page-button next" id="structure-next">Next <i class="fas fa-arrow-right"></i></button>
+            </div>
+        </section>
+        
+        <!-- Board of Directors Section -->
+        <section id="board">
+            <h2>Board of Directors</h2>
+            <p>As of 2025, the Philippine Trust Company (Philtrust Bank) is governed by a seasoned and diverse Board of Directors, comprising individuals with extensive experience in finance, law, governance, and public service.</p>
+            
+            <div class="board-container">
+                <!-- Executive Leadership -->
+                <div class="board-section">
+                    <h3>🏛️ Executive Leadership</h3>
+                    <div class="board-card">
+                        <div class="header">
+                            <h4>Dr. Jaime C. Laya – Vice Chairman & President</h4>
+                        </div>
+                        <div class="content">
+                            <p>Appointed in 1990, Dr. Laya brings over three decades of leadership to the bank.</p>
+                            <p>He holds approximately 0.0033% of the company's shares, valued at around ₱3.3 million.</p>
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/2/21/Jaime_C._Laya_-_2019_%28cropped%29.jpg" alt="Dr. Jaime C. Laya">
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Chairmen -->
+                <div class="board-section">
+                    <h3>Chairmen</h3>
+                    <div class="board-card">
+                        <div class="header">
+                            <h4>Gen. Hermogenes C. Esperon Jr. (Ret.) – Chairman of the Board</h4>
+                        </div>
+                        <div class="content">
+                            <p>Serving since 2022, Gen. Esperon is an independent director with a background in national security.</p>
+                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSV8kh6pU9n4Zw7bZCxqutPV9pkLHoiS5dG3Q&s" alt="Gen. Hermogenes C. Esperon Jr.">
+                        </div>
+                    </div>
+                    
+                    <div class="board-card">
+                        <div class="header">
+                            <h4>Mr. Basilio C. Yap – Chairman Emeritus</h4>
+                        </div>
+                        <div class="content">
+                            <p>A long-standing figure in the bank, Mr. Yap holds significant indirect ownership through various enterprises.</p>
+                            <img src="https://pbs.twimg.com/profile_images/464781722039500800/OIIMa1xb_400x400.jpeg" alt="Mr. Basilio C. Yap">
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Vice Chairmen -->
+                <div class="board-section">
+                    <h3>Vice Chairmen</h3>
+                    <div class="board-card">
+                        <div class="header">
+                            <h4>Dr. Emilio C. Yap III – Vice Chairman</h4>
+                        </div>
+                        <div class="content">
+                            <p>Appointed in 2009, Dr. Yap has substantial indirect holdings via Orient Enterprises and other firms.</p>
+                            <img src="https://i.ytimg.com/vi/rBnFywxOTJE/maxresdefault.jpg" alt="Dr. Emilio C. Yap III">
+                        </div>
+                    </div>
+                    
+                    <div class="board-card">
+                        <div class="header">
+                            <h4>Sr. Justice Josue N. Bellosillo (Ret.) – Vice Chairman & Corporate Counsel</h4>
+                        </div>
+                        <div class="content">
+                            <p>Serving since 2009, Justice Bellosillo contributes his legal expertise to the board.</p>
+                            <img src="https://elibrary.judiciary.gov.ph/assets/images/memorabilia/justices/bellosillojoseo.jpg" alt="Sr. Justice Josue N. Bellosillo">
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Directors -->
+                <div class="board-section">
+                    <h3>Directors</h3>
+                    <div class="profile-container">
+                        <div class="profile-card">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Scphil999jf_%28cropped%29.JPG/640px-Scphil999jf_%28cropped%29.JPG" alt="Dr. Hilario G. Davide Jr.">
+                            <div class="details">
+                                <h3>Dr. Hilario G. Davide Jr.</h3>
+                                <p>A former Chief Justice of the Supreme Court, Dr. Davide has been a board member since 2013.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="profile-card">
+                            <img src="https://e-rockwell.com/wp-content/uploads/2024/10/Benjamin-Ernesto-R-Lopez.webp" alt="Mr. Ernesto O. Chan">
+                            <div class="details">
+                                <h3>Mr. Ernesto O. Chan</h3>
+                                <p>With a tenure starting in 1989, Mr. Chan brings decades of experience to the board.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="profile-card">
+                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQZVuXp10XQcbbzqc2EnqgbvNQFMdLx_LgYiQ&s" alt="Ms. Miriam C. Cu">
+                            <div class="details">
+                                <h3>Ms. Miriam C. Cu</h3>
+                                <p>Appointed in 2009, Ms. Cu also serves as a Senior VP, contributing to both governance and operations.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="profile-card">
+                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTgvLx-8a2X1TL1ywTPwT1ND6JuNw_D_S9dIA&s" alt="Mr. Benjamin C. Yap">
+                            <div class="details">
+                                <h3>Mr. Benjamin C. Yap</h3>
+                                <p>Serving since 2016, Mr. Yap is a non-executive director with a background in business.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="profile-card">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/4/40/Tomas_V._Apacible_-_15th_Congress.jpg" alt="Mr. Tomas V. Apacible">
+                            <div class="details">
+                                <h3>Mr. Tomas V. Apacible</h3>
+                                <p>Appointed in 2024, Mr. Apacible brings fresh perspectives to the board.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="profile-card">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/1/1a/Gina_de_Venecia_%28cropped%29.jpg" alt="Ms. Maria Georgina P. De Venecia">
+                            <div class="details">
+                                <h3>Ms. Maria Georgina P. De Venecia</h3>
+                                <p>Serving since 2021, Ms. De Venecia contributes her insights as an independent director.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="profile-card">
+                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTQDqFFc5Hy60iCNPdcSb2isd5RlQx8ETdmoQ&s" alt="Mr. Calixto V. Chikiamco">
+                            <div class="details">
+                                <h3>Mr. Calixto V. Chikiamco</h3>
+                                <p>Appointed in 2021, Mr. Chikiamco offers expertise in economics and policy.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="profile-card">
+                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT7irhXueNxXjxmlsS7mAD2J5mbfThA-Z6hWQ&s" alt="Ms. Beatrice Jane L. Ang">
+                            <div class="details">
+                                <h3>Ms. Beatrice Jane L. Ang</h3>
+                                <p>Serving since 2022, Ms. Ang brings experience in governance and compliance.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Board Composition & Governance -->
+                <div class="board-section">
+                    <h3>📊 Board Composition & Governance</h3>
+                    <div class="board-stats">
+                        <div class="stat-box">
+                            <div class="stat-value">11.9 years</div>
+                            <div class="stat-label">Average Tenure</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-value">75.5 years</div>
+                            <div class="stat-label">Average Age</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-value"><45%</div>
+                            <div class="stat-label">Independent Directors</div>
+                        </div>
+                    </div>
+                    
+                    <h4>📌 Additional Information</h4>
+                    <ul>
+                        <li><strong>Shareholdings:</strong> Notable indirect ownership is held by Mr. Basilio C. Yap and Dr. Emilio C. Yap III through entities like Seabreeze Enterprises and Orient Enterprises.</li>
+                        <li><strong>Committee Roles:</strong> Directors serve on various committees, including Audit, Compensation, Governance, and Nominating Committees, ensuring comprehensive oversight.</li>
+                    </ul>
+                    
+                    <div class="references">
+                        <p><small>Source: <a href="https://www.philtrustbank.com/company-disclosures" target="_blank">Philtrust Bank Company Disclosures</a> | <a href="https://www.philtrustbank.com/bank-info/management" target="_blank">Philtrust Bank Management</a></small></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Management Committee Section -->
+        <section id="management">
+            <h2>Management Committee</h2>
+            <p>As of 2025, the Management Committee of the Philippine Trust Company (Philtrust Bank) comprises seasoned executives overseeing various operational and strategic functions. The committee is structured into specialized subcommittees to ensure effective governance, compliance, and operational efficiency.</p>
+            
+            <div class="management-container">
+                <!-- Key Management Executives -->
+                <div class="executives-section">
+                    <h3>🧑‍💼 Key Management Executives</h3>
+                    <div class="executive-list">
+                        <div class="executive-card">
+                            <img src="data:image/jpeg;base64,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" alt="Dr. Jaime C. Laya">
+                            <div class="executive-details">
+                                <div class="executive-name">Dr. Jaime C. Laya</div>
+                                <div class="executive-title">President & CEO</div>
+                            </div>
+                        </div>
+                        
+                        <div class="executive-card">
+                            <img src="data:image/jpeg;base64,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" alt="Sr. Justice Josue N. Bellosillo (Ret.)">
+                            <div class="executive-details">
+                                <div class="executive-name">Sr. Justice Josue N. Bellosillo (Ret.)</div>
+                                <div class="executive-title">Corporate Counsel</div>
+                            </div>
+                        </div>
+                        
+                        <div class="executive-card">
+                            <img src="https://media.licdn.com/dms/image/v2/D4E03AQFKedZRO2CUyw/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1688073883182?e=2147483647&v=beta&t=c3uRuu67TgRji4UdZ_V9nfiPkQf4awh7119V6nXcoHg" alt="Jose M. Fernandez">
+                            <div class="executive-details">
+                                <div class="executive-name">Jose M. Fernandez</div>
+                                <div class="executive-title">Chief Risk Officer</div>
+                            </div>
+                        </div>
+                        
+                        <div class="executive-card">
+                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ8CYhMpvilagT_Ur62edNIY9e-FZQh546Mzg&s" alt="Luisa A. Lucin">
+                            <div class="executive-details">
+                                <div class="executive-name">Luisa A. Lucin</div>
+                                <div class="executive-title">Chief Accounting Officer & Comptroller</div>
+                            </div>
+                        </div>
+                        
+                        <div class="executive-card">
+                            <img src="https://media.licdn.com/dms/image/sync/v2/C4D27AQF7SfZ2eK84Gg/articleshare-shrink_800/articleshare-shrink_800/0/1711166956102?e=2147483647&v=beta&t=kmJpw8ahOx5PdJXFFrFu1Wr9nvuU_uQ54f6QA7IR9CA" alt="Judy Rosario G. Cam">
+                            <div class="executive-details">
+                                <div class="executive-name">Judy Rosario G. Cam</div>
+                                <div class="executive-title">Chief Compliance Officer</div>
+                            </div>
+                        </div>
+                        
+                        <div class="executive-card">
+                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRDKZ9j06QRaiZmrFeCZix38JiHK6t6r0XY9w&s" alt="Virginia S. Choa-Shi">
+                            <div class="executive-details">
+                                <div class="executive-name">Virginia S. Choa-Shi</div>
+                                <div class="executive-title">Executive Vice President</div>
+                            </div>
+                        </div>
+                        
+                        <div class="executive-card">
+                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTxGV2l7r7wIzX-uj64jO1MSumIpok6GXCiaQ&s" alt="Benito D. Chua">
+                            <div class="executive-details">
+                                <div class="executive-name">Benito D. Chua</div>
+                                <div class="executive-title">Treasurer</div>
+                            </div>
+                        </div>
+                        
+                        <div class="executive-card">
+                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQMv639hNaOLpC2GCl62lQAHo5ktOlgHeSKdA&s" alt="Miriam C. Cu">
+                            <div class="executive-details">
+                                <div class="executive-name">Miriam C. Cu</div>
+                                <div class="executive-title">Senior Vice President</div>
+                            </div>
+                        </div>
+                        
+                        <div class="executive-card">
+                            <img src="https://media.licdn.com/dms/image/v2/C4E03AQFICCFlF5a9CA/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1516619013075?e=2147483647&v=beta&t=lBPnueiTv4_RG8oU1UcGDq0MkvZbBJyHH1vQQ8desUE" alt="Cherry M. Lim">
+                            <div class="executive-details">
+                                <div class="executive-name">Cherry M. Lim</div>
+                                <div class="executive-title">Vice President, Human Resources</div>
+                            </div>
+                        </div>
+                        
+                        <div class="executive-card">
+                            <img src="https://media.licdn.com/dms/image/v2/D4D03AQF8Mf6rGePOZQ/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1715853194516?e=2147483647&v=beta&t=l6-EpmpnoD2CYg9v81zfIUZS-eSvESXVWZbl6319GuM" alt="Atty. Jane L. Suarez">
+                            <div class="executive-details">
+                                <div class="executive-name">Atty. Jane L. Suarez</div>
+                                <div class="executive-title">Vice President, Legal Department</div>
+                            </div>
+                        </div>
+                        
+                        <div class="executive-card">
+                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTJtCJHZ_j3I6qFRQwLaSUlF5hIwBd2lQXpZQ&s" alt="Robert L. Lim">
+                            <div class="executive-details">
+                                <div class="executive-name">Robert L. Lim</div>
+                                <div class="executive-title">Vice President, Core Banking</div>
+                            </div>
+                        </div>
+                        
+                        <div class="executive-card">
+                            <img src="https://media.licdn.com/dms/image/v2/D5603AQFrLllvYoq5WA/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1725304249720?e=2147483647&v=beta&t=Oo0Syjhj7ejArL8AD81R9aJLTGwhbc4TG596OXVH_nQ" alt="Bryan Joseph A. Lopez">
+                            <div class="executive-details">
+                                <div class="executive-name">Bryan Joseph A. Lopez</div>
+                                <div class="executive-title">Chief Technology Officer</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Primary Management Committees -->
+                <div class="committees-section">
+                    <h3>🏢 Primary Management Committees</h3>
+                    
+                    <div class="committee-card">
+                        <h4 class="committee-name">1. Anti-Money Laundering Committee (AMLCom)</h4>
+                        <div class="committee-members">
+                            <div class="committee-member"><span class="member-role">Head:</span> Atty. Martin B. Isidro, SVP</div>
+                            <div class="committee-member"><span class="member-role">Assistant Head:</span> Atty. Jane L. Suarez, VP</div>
+                            <div class="committee-member"><span class="member-role">Members:</span> George P. Castro, VP; Emmanuel M. Sales, SAVP</div>
+                            <div class="committee-member"><span class="member-role">Ex-Officio Member:</span> Pompeyo A. Claveria, VP/Compliance Officer</div>
+                        </div>
+                    </div>
+                    
+                    <div class="committee-card">
+                        <h4 class="committee-name">2. Budget and Asset-Liability Committee</h4>
+                        <div class="committee-members">
+                            <div class="committee-member"><span class="member-role">Head:</span> Benito D. Chua, Treasurer</div>
+                            <div class="committee-member"><span class="member-role">Assistant Head:</span> Corazon L. Ho, SVP</div>
+                            <div class="committee-member"><span class="member-role">Members:</span> Luisa A. Lucin, SVP/CFO; Josephine Y. Ang, VP; Edward Chan, AVP</div>
+                        </div>
+                    </div>
+                    
+                    <div class="committee-card">
+                        <h4 class="committee-name">3. Personnel Management, Employee Benefits & Ethics Committee</h4>
+                        <div class="committee-members">
+                            <div class="committee-member"><span class="member-role">Head:</span> Cherry M. Lim, VP</div>
+                            <div class="committee-member"><span class="member-role">Assistant Head:</span> Atty. Jane L. Suarez, VP</div>
+                            <div class="committee-member"><span class="member-role">Members:</span> BGen. Ramiro G. Busalanan (Ret.), VP; Edward Chan, AVP; Rosemarie N. Lee, AVP</div>
+                        </div>
+                    </div>
+                    
+                    <div class="committee-card">
+                        <h4 class="committee-name">4. IT Steering Committee</h4>
+                        <div class="committee-members">
+                            <div class="committee-member"><span class="member-role">Head:</span> Luisa A. Lucin, SVP</div>
+                            <div class="committee-member"><span class="member-role">Assistant Head:</span> George P. Castro, VP</div>
+                            <div class="committee-member"><span class="member-role">Members:</span> Josephine Y. Ang, VP; Atty. Nemesio M. Domingo, VP; Georgiana N. Abellana, SAVP</div>
+                            <div class="committee-member"><span class="member-role">Ex-Officio Member/Secretary:</span> Atty. Renniel C. Mailom, DPO</div>
+                        </div>
+                    </div>
+                    
+                    <div class="committee-card">
+                        <h4 class="committee-name">5. Credit and Loan Review Committee</h4>
+                        <div class="committee-members">
+                            <div class="committee-member"><span class="member-role">Head:</span> Atty. Nemesio M. Domingo, VP</div>
+                            <div class="committee-member"><span class="member-role">Assistant Head:</span> Josephine Y. Ang, VP</div>
+                            <div class="committee-member"><span class="member-role">Members:</span> Atty. Jane L. Suarez, VP; Cesar M. Esponilla, VP; Ely J. Gacute, AVP</div>
+                            <div class="committee-member"><span class="member-role">Ex-Officio Member/Secretary:</span> Pompeyo A. Claveria, VP/Compliance Officer</div>
+                        </div>
+                    </div>
+                    
+                    <div class="committee-card">
+                        <h4 class="committee-name">6. Health and Safety Committee</h4>
+                        <div class="committee-members">
+                            <div class="committee-member"><span class="member-role">Head:</span> BGen. Ramiro G. Busalanan (Ret.), VP</div>
+                            <div class="committee-member"><span class="member-role">Assistant Head:</span> Cherry M. Lim, VP</div>
+                            <div class="committee-member"><span class="member-role">Members:</span> Georgiana N. Abellana, SAVP; Paul Abraham L. Acelajado; Ian Christopher G. Anchilo; Karen C. Tan; Marvin Glenn L. Dumalag; Lorraine T. Tan, RN</div>
+                            <div class="committee-member"><span class="member-role">Secretary:</span> Judy Boy V. Olvida</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+             <div class="references">
+                <p><small>Source: <a href="https://www.philtrustbank.com/bank-info/management" target="_blank">Philtrust Bank Website</a></small></p>
+            </div>
+            <div class="page-controls">
+                <button class="page-button prev" id="management-prev"><i class="fas fa-arrow-left"></i> Previous</button>
+                <button class="page-button next" id="management-next">Next <i class="fas fa-arrow-right"></i></button>
+            </div>
+        </section>
+        
+        <!-- Capital Structure Section -->
+        <section id="capital">
+            <h2>Capital Structure and Adequacy</h2>
+            
+            <div class="capital-container">
+                <!-- Capital Structure -->
+                <div class="capital-section">
+                    <h3 class="capital-heading"><span class="emoji">🏦</span> Capital Structure (as of December 31, 2024)</h3>
+                    
+                    <div class="capital-item">
+                        <div class="capital-label">Authorized Capital Stock:</div>
+                        <div class="capital-value">₱22.0 billion</div>
+                    </div>
+                    
+                    <div class="capital-item">
+                        <div class="capital-label">Paid-Up Capital:</div>
+                        <div class="capital-value">₱10.0 billion</div>
+                    </div>
+                    
+                    <h4>Ownership Composition:</h4>
+                    
+                    <div class="ownership-chart">
+                        <div class="ownership-label">Filipino Shareholders: 99.9772%</div>
+                        <div class="ownership-label ownership-foreign">0.0228%</div>
+                    </div>
+                    
+                    <div class="ownership-legend">
+                        <div class="legend-item">
+                            <div class="legend-color" style="background-color: #003366;"></div>
+                            Filipino Shareholders: 99.9772%
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color" style="background-color: #ffcc00;"></div>
+                            Foreign Shareholders: 0.0228%
+                        </div>
+                    </div>
+                    
+                    <p>This structure underscores the bank's strong domestic ownership base and commitment to financial stability.</p>
+                </div>
+                
+                <!-- Capital Adequacy -->
+                <div class="capital-section">
+                    <h3 class="capital-heading"><span class="emoji">📊</span> Capital Adequacy</h3>
+                    
+                    <p>While specific figures for 2024 are not publicly disclosed, historical data indicates that Philtrust Bank has consistently maintained a Capital Adequacy Ratio (CAR) well above the regulatory minimum set by the Bangko Sentral ng Pilipinas (BSP), which is 10%. For instance, in 2018, the bank's CAR was reported at 34.1%.</p>
+                    
+                    <div class="note">
+                        <p>These figures indicate a solid financial foundation and ongoing growth in the bank's capital base.</p>
+                        
+                        <p>Philtrust Bank's strong capital position and conservative approach position it favorably to navigate financial uncertainties and support its growth initiatives. For the most recent financial data, you may refer to the bank's Annual Reports.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="references">
+                <p><small>Source: <a href="https://www.philtrustbank.com/company-disclosures" target="_blank">Philtrust Bank Website</a></small></p>
+            </div>
+            <div class="page-controls">
+                <button class="page-button prev" id="capital-prev"><i class="fas fa-arrow-left"></i> Previous</button>
+                <button class="page-button next" id="capital-next">Next <i class="fas fa-arrow-right"></i></button>
+            </div>
+        </section>
+        
+        <!-- Corporate Governance Section -->
+        <section id="governance">
+            <h2>Corporate Governance</h2>
+            
+            <div class="governance-container">
+                <p>Philtrust Bank maintains a robust corporate governance framework that ensures transparency, accountability, and ethical conduct throughout its operations. The bank adheres to the highest standards of corporate governance in compliance with regulations set by the Bangko Sentral ng Pilipinas and other regulatory bodies.</p>
+                
+                <div class="governance-card">
+                    <h3 class="governance-heading"><span class="emoji">🔗</span> Corporate Governance Resources</h3>
+                    <p>You can access Philtrust Bank's comprehensive corporate governance resources through their official website. The Corporate Governance page provides detailed information, including:</p>
+                    
+                    <ul class="documents-list">
+                        <li>Manual on Corporate Governance</li>
+                        <li>Code of Business Conduct and Ethics</li>
+                        <li>Board Committee charters and compositions</li>
+                        <li>Corporate Social Responsibility initiatives</li>
+                        <li>Enterprise Risk Management framework</li>
+                    </ul>
+                    
+                    <a href="https://philtrustbank.com/corporate-governance" target="_blank" class="resource-link">Visit Corporate Governance Page</a>
+                </div>
+                
+                <div class="governance-card">
+                    <h3 class="governance-heading"><span class="emoji">📑</span> Company Disclosures</h3>
+                    <p>For more detailed reports and regulatory filings related to corporate governance, you can visit the Company Disclosures page, which contains:</p>
+                    
+                    <ul class="documents-list">
+                        <li>Annual Corporate Governance Reports (I-ACGR)</li>
+                        <li>General Information Sheets</li>
+                        <li>SEC Forms and Filings</li>
+                        <li>Annual Reports</li>
+                        <li>Quarterly Financial Statements</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="references">
+                <p><small>Source: <a href="https://www.philtrustbank.com/corporate-governance" target="_blank">Philtrust Bank Website</a></small></p>
+            </div>
+            <div class="page-controls">
+                <button class="page-button prev" id="governance-prev"><i class="fas fa-arrow-left"></i> Previous</button>
+                <button class="page-button next" id="governance-next">Next <i class="fas fa-arrow-right"></i></button>
+            </div>
+        </section>
+        
+        <!-- CSR Section -->
+        <section id="csr">
+            <h2>Corporate Social Responsibility</h2>
+            
+            <div class="csr-container">
+                <div class="csr-intro">
+                    <h3>CSR Philosophy</h3>
+                    <p>Philtrust Bank recognizes its responsibility to contribute positively to the communities it serves. The bank's Corporate Social Responsibility (CSR) initiatives reflect its commitment to sustainable development and social impact.</p>
+                    
+                    <div class="csr-quote">
+                        "As stewards of private and public wealth, we are accountable not only to our clientele and regulators but to the broader community and future generations."
+                    </div>
+                </div>
+                
+                <div class="csr-initiatives">
+                    <div class="csr-card">
+                        <div class="csr-card-header">
+                            Education Support
+                        </div>
+                        <div class="csr-card-body">
+                            <p>Philtrust Bank supports educational institutions through scholarships, facility improvement, and financial literacy programs aimed at empowering students and educators.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="csr-card">
+                        <div class="csr-card-header">
+                            Community Development
+                        </div>
+                        <div class="csr-card-body">
+                            <p>Through partnerships with local government units and non-profit organizations, the bank contributes to community development projects focused on infrastructure, livelihood, and health services.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="csr-card">
+                        <div class="csr-card-header">
+                            Environmental Initiatives
+                        </div>
+                        <div class="csr-card-body">
+                            <p>Philtrust Bank is committed to environmental sustainability through internal green practices, support for conservation efforts, and financing environmentally responsible projects.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="csr-footer">
+                    <p>For more information about Philtrust Bank's CSR activities and impact reports, please visit the bank's official website or contact their Corporate Communications Department.</p>
+                </div>
+            </div>
+            <div class="references">
+                <p><small>Source: <a href="https://www.philtrustbank.com/" target="_blank">Philtrust Bank Website</a></small></p>
+            </div>
+            <div class="page-controls">
+                <button class="page-button prev" id="csr-prev"><i class="fas fa-arrow-left"></i> Previous</button>
+                <button class="page-button next" id="csr-next">Next <i class="fas fa-arrow-right"></i></button>
+            </div>
+        </section>
+        
+        <!-- Financial Statements Section -->
+        <section id="financial">
+            <h2>Financial Statement Reports</h2>
+            <h3>Last Three Years</h3>
+            
+            <div class="financial-container">
+                <div class="year-tabs">
+                    <div class="year-tab active" onclick="showYear('2023')">2023</div>
+                    <div class="year-tab" onclick="showYear('2022')">2022</div>
+                    <div class="year-tab" onclick="showYear('2021')">2021</div>
+                </div>
+                
+                <!-- 2023 Financial Data -->
+                <div id="year-2023" class="year-content active">
+                    <div class="financial-metrics">
+                        <div class="metric-box">
+                            <div class="metric-name">Net Income After Tax</div>
+                            <div class="metric-value">₱1.03 billion</div>
+                            <div class="metric-change positive">+38.1% from 2022</div>
+                        </div>
+                        <div class="metric-box">
+                            <div class="metric-name">Net Loans and Receivables</div>
+                            <div class="metric-value">₱28.87 billion</div>
+                        </div>
+                        <div class="metric-box">
+                            <div class="metric-name">Investments in Bonds/Securities</div>
+                            <div class="metric-value">₱127.48 billion</div>
+                        </div>
+                        <div class="metric-box">
+                            <div class="metric-name">Gross Earnings</div>
+                            <div class="metric-value">₱9.38 billion</div>
+                        </div>
+                        <div class="metric-box">
+                            <div class="metric-name">Net Interest Income</div>
+                            <div class="metric-value">₱3.97 billion</div>
+                        </div>
+                    </div>
+                    
+                    <div class="performance-summary">
+                        <p>These figures indicate significant growth in the bank's lending activities and investment portfolio, contributing to increased profitability.</p>
+                    </div>
+                    
+                    <a href="https://www.philtrustbank.com/sites/default/files/company-disclosure/Annual%20Report%20%28SEC%20Form%2017-A%29%20for%20the%20year%20ended%20December%2031%2C%202023.pdf" target="_blank" class="report-link">View 2023 Annual Report</a>
+                </div>
+                
+                <!-- 2022 Financial Data -->
+                <div id="year-2022" class="year-content">
+                    <div class="financial-metrics">
+                        <div class="metric-box">
+                            <div class="metric-name">Net Income After Tax</div>
+                            <div class="metric-value">₱0.75 billion</div>
+                        </div>
+                        <div class="metric-box">
+                            <div class="metric-name">Net Loans and Receivables</div>
+                            <div class="metric-value">₱22.46 billion</div>
+                        </div>
+                        <div class="metric-box">
+                            <div class="metric-name">Investments in Bonds/Securities</div>
+                            <div class="metric-value">₱121.41 billion</div>
+                        </div>
+                    </div>
+                    
+                    <div class="performance-summary">
+                        <p>The bank maintained a conservative approach, focusing on stable investments and prudent lending practices.</p>
+                    </div>
+                    
+                    <a href="https://www.philtrustbank.com/sites/default/files/company-disclosure/106th%20Annual%20Report%20-%202022.pdf" target="_blank" class="report-link">View 2022 Annual Report</a>
+                </div>
+                
+                <!-- 2021 Financial Data -->
+                <div id="year-2021" class="year-content">
+                    <div class="financial-metrics">
+                        <div class="metric-box">
+                            <div class="metric-name">Net Income After Tax</div>
+                            <div class="metric-value">₱0.56 billion</div>
+                        </div>
+                        <div class="metric-box">
+                            <div class="metric-name">Net Loans and Receivables</div>
+                            <div class="metric-value">₱20.15 billion</div>
+                        </div>
+                        <div class="metric-box">
+                            <div class="metric-name">Investments in Bonds/Securities</div>
+                            <div class="metric-value">₱115.30 billion</div>
+                        </div>
+                    </div>
+                    
+                    <div class="performance-summary">
+                        <p>Despite economic challenges, Philtrust Bank sustained profitability through strategic asset management.</p>
+                    </div>
+                    
+                    <a href="https://www.philtrustbank.com/sites/default/files/company-disclosure/105th%20Annual%20Report%20-%202021.pdf" target="_blank" class="report-link">View 2021 Annual Report</a>
+                </div>
+                
+                <!-- Access Full Reports Section -->
+                <div class="access-reports">
+                    <h3>📄 Access the Full Reports</h3>
+                    <p>For detailed financial statements, you can refer to the following documents:</p>
+                    
+                    <ul class="reports-list">
+                        <li><a href="https://www.philtrustbank.com/sites/default/files/company-disclosure/Annual%20Report%20%28SEC%20Form%2017-A%29%20for%20the%20year%20ended%20December%2031%2C%202023.pdf" target="_blank">2023 Annual Report (SEC Form 17-A)</a></li>
+                        <li><a href="https://www.philtrustbank.com/sites/default/files/company-disclosure/106th%20Annual%20Report%20-%202022.pdf" target="_blank">2022 Annual Report</a></li>
+                        <li><a href="https://www.philtrustbank.com/sites/default/files/company-disclosure/105th%20Annual%20Report%20-%202021.pdf" target="_blank">2021 Annual Report</a></li>
+                    </ul>
+                    
+                    <p>These reports provide comprehensive insights into the bank's financial performance, including statements of financial position, income statements, cash flow statements, and accompanying notes.</p>
+                    
+                    <p>For more information and additional disclosures, you may visit <a href="https://www.philtrustbank.com/company-disclosures" target="_blank">Philtrust Bank's Company Disclosures page</a>.</p>
+                </div>
+            </div>
+            
+            <script>
+                function showYear(year) {
+                    // Hide all content
+                    var contents = document.getElementsByClassName('year-content');
+                    for (var i = 0; i < contents.length; i++) {
+                        contents[i].classList.remove('active');
+                    }
+                    
+                    // Remove active class from all tabs
+                    var tabs = document.getElementsByClassName('year-tab');
+                    for (var i = 0; i < tabs.length; i++) {
+                        tabs[i].classList.remove('active');
+                    }
+                    
+                    // Show selected content and activate tab
+                    document.getElementById('year-' + year).classList.add('active');
+                    event.currentTarget.classList.add('active');
+                }
+            </script>
+        </section>
+        
+        <!-- Team Section -->
+        <section id="team">
+            <h2>Our Team</h2>
+            <div class="team-container">
+                <div class="team-section">
+                    <div class="team-grid">
+                        <div class="team-member">
+                            <img src="https://scontent.fcgy3-2.fna.fbcdn.net/v/t39.30808-6/471206995_1346342376385344_4647213032150375805_n.jpg?_nc_cat=105&ccb=1-7&_nc_sid=cc71e4&_nc_eui2=AeHMCOSX76GjQhBxSARTfJEipX1lRNZtdY-lfWVE1m11j6j-o93pkqR2QJ1uA0B0gAq5hYyDqXgEDTM21piP3eU0&_nc_ohc=7FkcN3ObMmkQ7kNvwE3cWDi&_nc_oc=AdmGtbCCmDRcXHfwEhtOt9wmeEXByQOGDi8_I91HDL8XuDlCwJC04Fu_1YqygR60dpk&_nc_zt=23&_nc_ht=scontent.fcgy3-2.fna&_nc_gid=X-aD5nZwvlGBVv2NNgVbZg&oh=00_AfGK96ZV4IhKcGXpymJYSrMIxLAFujhqYEWyQ1PXJha_vQ&oe=6814CDC9" alt="Team Member">
+                            <h3>Josua Brian Caawasan</h3>
+                            <p>BSBA STUDENT</p>
+                            <div class="social-links">
+                                <a href="#"><i class="fab fa-linkedin"></i></a>
+                                <a href="#"><i class="fab fa-twitter"></i></a>
+                                <a href="#"><i class="far fa-envelope"></i></a>
+                            </div>
+                        </div>
+                        <div class="team-member">
+                            <img src="https://scontent.fcgy3-2.fna.fbcdn.net/v/t39.30808-6/490477671_700815272285321_6752099615311394703_n.jpg?_nc_cat=110&ccb=1-7&_nc_sid=6ee11a&_nc_eui2=AeHKdO8PCgekBexgf87VyQqFJ7oOQjR-HoYnug5CNH4ehlmjYdJgUFi9RrrEDydxdyXjCBQS99B_450ZMh3-AEog&_nc_ohc=0l6wjiU2CIAQ7kNvwH6BTDc&_nc_oc=AdlJmfkIFChPdC20piaMvQ3-VXLxN_EwgOOKflAo36dKaO5sWHC6ulVoGNAMvSifW_g&_nc_zt=23&_nc_ht=scontent.fcgy3-2.fna&_nc_gid=pxT_Iwtxx5NVdXy4AbdZwA&oh=00_AfFCnkpOjHEkAI9XAN-wFfkZkqltdL_gd_2Jx0qC2_5MMQ&oe=6814C3F3" alt="Team Member">
+                            <h3>Diana Lyn H. Nacaytuna</h3>
+                            <p>BSBA STUDENT</p>
+                            <div class="social-links">
+                                <a href="#"><i class="fab fa-linkedin"></i></a>
+                                <a href="#"><i class="fab fa-twitter"></i></a>
+                                <a href="#"><i class="far fa-envelope"></i></a>
+                            </div>
+                        </div>
+                       
+                    </div>
+                </div>
+            </div>
+            <div class="page-controls">
+                <button class="page-button prev" id="team-prev"><i class="fas fa-arrow-left"></i> Previous</button>
+                <button class="page-button next" id="team-next">Next <i class="fas fa-arrow-right"></i></button>
+            </div>
+        </section>
+        
+        <!-- References Section -->
+        <section id="references">
+            <h2>References</h2>
+            <div class="references-container">
+                <div class="reference-list">
+                    <h3>Corporate Information</h3>
+                    <ul>
+                        <li>Philtrust Bank. (2023). <em>About Us</em>. Philippine Trust Company. 
+                            <a href="https://www.philtrustbank.com/about-us" target="_blank">https://www.philtrustbank.com/about-us</a>
+                        </li>
+                        <li>Philtrust Bank. (2023). <em>Vision and Mission</em>. Philippine Trust Company. 
+                            <a href="https://www.philtrustbank.com/vision-mission" target="_blank">https://www.philtrustbank.com/vision-mission</a>
+                        </li>
+                        <li>Philtrust Bank. (2023). <em>Corporate Governance</em>. Philippine Trust Company. 
+                            <a href="https://www.philtrustbank.com/corporate-governance" target="_blank">https://www.philtrustbank.com/corporate-governance</a>
+                        </li>
+                    </ul>
+                    
+                    <h3>Financial Information</h3>
+                    <ul>
+                        <li>Philtrust Bank. (2022). <em>Annual Report 2022</em>. Philippine Trust Company. 
+                            <a href="https://www.philtrustbank.com/investor-relations/annual-reports" target="_blank">https://www.philtrustbank.com/investor-relations/annual-reports</a>
+                        </li>
+                        <li>Bangko Sentral ng Pilipinas. (2023). <em>Banking Statistics</em>. BSP. 
+                            <a href="https://www.bsp.gov.ph/statistics/banking" target="_blank">https://www.bsp.gov.ph/statistics/banking</a>
+                        </li>
+                        <li>Philippine Stock Exchange. (2023). <em>Listed Companies - Philippine Trust Company</em>. PSE. 
+                            <a href="https://www.pse.com.ph/listed-companies/" target="_blank">https://www.pse.com.ph/listed-companies/</a>
+                        </li>
+                    </ul>
+                    
+                    <h3>Industry Analysis</h3>
+                    <ul>
+                        <li>Bangko Sentral ng Pilipinas. (2023). <em>Banking Sector Outlook Survey</em>. BSP. 
+                            <a href="https://www.bsp.gov.ph/publications/banking-sector-outlook" target="_blank">https://www.bsp.gov.ph/publications/banking-sector-outlook</a>
+                        </li>
+                        <li>Asian Banking & Finance. (2023). <em>Philippine Banking Industry Report</em>. ABF. 
+                            <a href="https://asianbankingandfinance.net/philippines" target="_blank">https://asianbankingandfinance.net/philippines</a>
+                        </li>
+                        <li>World Bank. (2023). <em>Philippines Economic Update</em>. World Bank Group. 
+                            <a href="https://www.worldbank.org/en/country/philippines/publication/philippines-economic-updates" target="_blank">https://www.worldbank.org/en/country/philippines/publication/philippines-economic-updates</a>
+                        </li>
+                    </ul>
+                    
+                    <h3>Image Sources</h3>
+                    <ul>
+                        <li>All company logos, branch images, and corporate photos are property of Philippine Trust Company (Philtrust Bank).</li>
+                        <li>Additional stock images used are licensed from various stock photo platforms for educational purposes only.</li>
+                        <li>Icons provided by Font Awesome under their free usage license.</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="page-controls">
+                <button class="page-button prev" id="references-prev"><i class="fas fa-arrow-left"></i> Previous</button>
+                <button class="page-button next" id="references-next">Next <i class="fas fa-arrow-right"></i></button>
+            </div>
+        </section>
+        
+        <!-- Disclaimer Section -->
+        <section id="disclaimer">
+            <h2>Disclaimer</h2>
+            <p>This HTML presentation has been prepared for academic purposes and is not an official publication of the Philippine Trust Company (Philtrust Bank). The content presented is based on publicly available information and is intended solely for educational purposes.</p>
+            
+            <div class="accent-bg">
+                <p><strong>IMPORTANT:</strong> The information contained in this document may not be current or accurate and should not be used as a basis for making financial decisions or investments. For accurate and up-to-date information about Philtrust Bank's products, services, governance, and financial status, please visit the official website or contact the bank directly.</p>
+            </div>
+            
+            <p>All trademarks, logos, and images are the property of their respective owners. The use of such material in this academic presentation is for illustrative and educational purposes only and does not imply any affiliation with or endorsement by Philtrust Bank or any other entities mentioned.</p>
+            
+            <div class="page-controls">
+                <button class="page-button prev" id="disclaimer-prev"><i class="fas fa-arrow-left"></i> Previous</button>
+            </div>
+        </section>
+    </div>
+    
+    <!-- Scroll to top button -->
+    <div class="scroll-top">
+        <i class="fas fa-arrow-up"></i>
+    </div>
+    
+    <div class="page-spinner">
+        <div class="spinner"></div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Mobile nav toggle
+            const mobileToggle = document.querySelector('.mobile-nav-toggle');
+            const sidebar = document.querySelector('.sidebar');
+            const content = document.querySelector('.content');
+            
+            if (mobileToggle) {
+                mobileToggle.addEventListener('click', function() {
+                    sidebar.classList.toggle('mobile-active');
+                });
+            }
+            
+            // Preloader
+            const preloader = document.querySelector('.preloader');
+            
+            if (preloader) {
+                window.addEventListener('load', function() {
+                    preloader.classList.add('fade-out');
+                    setTimeout(function() {
+                        preloader.style.display = 'none';
+                    }, 500);
+                });
+            }
+            
+            // Section animations
+            const sections = document.querySelectorAll('section');
+            
+            // Page navigation system
+            const pageLinks = document.querySelectorAll('.sidebar .menu a');
+            const pageSpinner = document.querySelector('.page-spinner');
+            
+            // Define the order of pages
+            const pageOrder = [
+                'home', 'background', 'corporate-profile', 'vision-mission', 
+                'branches', 'scope', 'products', 'highlights', 'awards',
+                'structure', 'board', 'management', 'capital', 'governance',
+                'csr', 'financial', 'team', 'references', 'disclaimer'
+            ];
+            
+            // Function to show a specific page
+            function showPage(pageId) {
+                // First hide all sections
+                sections.forEach(section => {
+                    section.classList.remove('active');
+                });
+                
+                // Show loading spinner
+                pageSpinner.classList.add('active');
+                
+                // Remove active class from all links
+                pageLinks.forEach(link => {
+                    link.classList.remove('active');
+                });
+                
+                // Add active class to the current link
+                const currentLink = document.querySelector(`.sidebar .menu a[href="#${pageId}"]`);
+                if (currentLink) {
+                    currentLink.classList.add('active');
+                }
+                
+                // Simulate loading (for demonstration purposes)
+                setTimeout(() => {
+                    // Hide spinner
+                    pageSpinner.classList.remove('active');
+                    
+                    // Show the selected section
+                    const targetSection = document.getElementById(pageId);
+                    if (targetSection) {
+                        targetSection.classList.add('active');
+                        // Scroll to top when changing pages
+                        window.scrollTo(0, 0);
+                    }
+                }, 300);
+            }
+            
+            // Initialize: Show home page by default
+            showPage('home');
+            
+            // Add event listeners to all navigation links
+            pageLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const pageId = this.getAttribute('href').substring(1);
+                    showPage(pageId);
+                    
+                    // Close mobile sidebar if open
+                    if (window.innerWidth < 992) {
+                        sidebar.classList.remove('mobile-active');
+                    }
+                });
+            });
+            
+            // Set up previous and next buttons
+            pageOrder.forEach((pageId, index) => {
+                // Previous button
+                const prevButton = document.getElementById(`${pageId}-prev`);
+                if (prevButton && index > 0) {
+                    prevButton.addEventListener('click', () => {
+                        showPage(pageOrder[index - 1]);
+                    });
+                } else if (prevButton) {
+                    prevButton.style.display = 'none';
+                }
+                
+                // Next button
+                const nextButton = document.getElementById(`${pageId}-next`);
+                if (nextButton && index < pageOrder.length - 1) {
+                    nextButton.addEventListener('click', () => {
+                        showPage(pageOrder[index + 1]);
+                    });
+                } else if (nextButton) {
+                    nextButton.style.display = 'none';
+                }
+            });
+            
+            // Scroll to top functionality
+            const scrollTopButton = document.querySelector('.scroll-top');
+            
+            window.addEventListener('scroll', function() {
+                if (window.pageYOffset > 200) {
+                    scrollTopButton.classList.add('active');
+                } else {
+                    scrollTopButton.classList.remove('active');
+                }
+            });
+            
+            scrollTopButton.addEventListener('click', function() {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
+</html> 
