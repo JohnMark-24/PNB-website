@@ -1,0 +1,1758 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Philippine National Bank - PNB</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Montserrat', Arial, sans-serif;
+        }
+        
+        :root {
+            --primary-color: #00529b;
+            --primary-dark: #003b6f;
+            --primary-light: #deeaf7;
+            --secondary-color: #f7a81b;
+            --secondary-light: #ffefd1;
+            --light-bg: #f8f9fa;
+            --dark-text: #333;
+            --light-text: #fff;
+            --gray-text: #6c757d;
+            --border-radius: 12px;
+            --box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            --transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+        }
+        
+        body {
+            display: flex;
+            min-height: 100vh;
+            background-color: var(--light-bg);
+            color: var(--dark-text);
+            line-height: 1.7;
+        }
+        
+        /* Navigation Styles */
+        .sidebar {
+            width: 280px;
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+            color: var(--light-text);
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            padding: 40px 0;
+            box-shadow: 5px 0 25px rgba(0,0,0,0.1);
+            z-index: 100;
+            transition: var(--transition);
+        }
+        
+        .sidebar .logo-container {
+            padding: 0 25px 25px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            margin-bottom: 30px;
+        }
+        
+        .sidebar .logo {
+            width: 150px;
+            margin-bottom: 15px;
+            filter: drop-shadow(0 5px 10px rgba(0,0,0,0.1));
+            transition: var(--transition);
+        }
+        
+        .sidebar .logo:hover {
+            transform: scale(1.05);
+        }
+        
+        .sidebar h3 {
+            color: white;
+            font-family: 'Playfair Display', serif;
+            font-weight: 600;
+            margin-top: 10px;
+            font-size: 20px;
+            letter-spacing: 0.5px;
+        }
+        
+        .sidebar nav ul {
+            list-style: none;
+        }
+        
+        .sidebar nav ul li {
+            margin-bottom: 5px;
+        }
+        
+        .sidebar nav ul li a {
+            display: block;
+            padding: 12px 25px;
+            color: var(--light-text);
+            text-decoration: none;
+            transition: var(--transition);
+            font-size: 15px;
+            font-weight: 400;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .sidebar nav ul li a:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: rgba(255,255,255,0.1);
+            transition: var(--transition);
+        }
+        
+        .sidebar nav ul li a:hover:before {
+            left: 0;
+        }
+        
+        .sidebar nav ul li a:hover {
+            background-color: rgba(255,255,255,0.1);
+            padding-left: 30px;
+            color: var(--secondary-color);
+        }
+        
+        /* Main Content Styles */
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            padding: 50px;
+            max-width: 1400px;
+        }
+        
+        section {
+            margin-bottom: 70px;
+            padding: 40px;
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            transition: var(--transition);
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 0.7s forwards;
+            animation-delay: calc(var(--animation-order) * 0.1s);
+        }
+        
+        section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+        }
+        
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        h1, h2, h3, h4 {
+            font-family: 'Playfair Display', serif;
+            color: var(--primary-color);
+            margin-bottom: 25px;
+            position: relative;
+        }
+        
+        h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+        
+        h2 {
+            font-size: 2.2rem;
+            font-weight: 600;
+            padding-bottom: 15px;
+            position: relative;
+        }
+        
+        h2:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 80px;
+            height: 3px;
+            background: var(--secondary-color);
+            transition: var(--transition);
+        }
+        
+        section:hover h2:after {
+            width: 120px;
+        }
+        
+        h3 {
+            font-size: 1.5rem;
+            margin-top: 30px;
+            margin-bottom: 20px;
+            color: var(--primary-dark);
+        }
+        
+        h4 {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            color: var(--secondary-color);
+        }
+        
+        p {
+            line-height: 1.8;
+            margin-bottom: 20px;
+            color: var(--gray-text);
+        }
+        
+        .tagline {
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            color: var(--secondary-color);
+            font-size: 1.4rem;
+            margin-bottom: 30px;
+            letter-spacing: 0.5px;
+        }
+        
+        .hero-image {
+            width: 100%;
+            height: 400px;
+            background-color: #ddd;
+            margin-bottom: 40px;
+            background-image: url('https://blog.adobe.com/en/publish/2023/02/17/media_1103470479ae2e2e169f961d439b89046651a20d4.jpeg?width=1200&format=pjpg&optimize=medium');
+            background-size: cover;
+            background-position: center;
+            border-radius: var(--border-radius);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 15px 45px rgba(0,0,0,0.1);
+            transition: var(--transition);
+        }
+        
+        .hero-image:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to right, rgba(0,82,155,0.7), rgba(0,0,0,0.2));
+        }
+        
+        .hero-image:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 30%;
+            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+        }
+        
+        .hero-image:hover {
+            transform: scale(1.02);
+        }
+        
+        .placeholder-text {
+            position: absolute;
+            bottom: 40px;
+            left: 40px;
+            color: white;
+            z-index: 1;
+            font-size: 2rem;
+            font-family: 'Playfair Display', serif;
+            font-weight: 600;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+        
+        .profile-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+        
+        .profile-card {
+            background-color: var(--light-bg);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--box-shadow);
+            transition: var(--transition);
+            text-align: center;
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+        
+        .profile-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        
+        .profile-image {
+            width: 100%;
+            height: 250px;
+            background-color: #eee;
+            background-image: url('https://placeholder.com/250');
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .profile-image:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, transparent 50%, rgba(0,0,0,0.7));
+            opacity: 0;
+            transition: var(--transition);
+        }
+        
+        .profile-card:hover .profile-image:before {
+            opacity: 1;
+        }
+        
+        .profile-info {
+            padding: 25px 20px;
+            transition: var(--transition);
+        }
+        
+        .profile-card:hover .profile-info {
+            background-color: white;
+        }
+        
+        .profile-info h4 {
+            margin-bottom: 10px;
+            transition: var(--transition);
+        }
+        
+        .profile-card:hover .profile-info h4 {
+            color: var(--primary-color);
+        }
+        
+        .profile-info p {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 8px;
+        }
+        
+        .profile-info ul {
+            text-align: left;
+            margin-top: 15px;
+            font-size: 14px;
+            color: var(--gray-text);
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+            font-size: 15px;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        
+        table, th, td {
+            border: none;
+        }
+        
+        th, td {
+            padding: 15px;
+            text-align: left;
+        }
+        
+        th {
+            background-color: var(--primary-color);
+            color: var(--light-text);
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            position: relative;
+        }
+        
+        th:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--secondary-color);
+        }
+        
+        tr {
+            transition: var(--transition);
+        }
+        
+        tr:nth-child(even) {
+            background-color: var(--light-bg);
+        }
+        
+        tr:hover {
+            background-color: var(--primary-light);
+        }
+        
+        ul, ol {
+            margin-left: 20px;
+            margin-bottom: 25px;
+            color: var(--gray-text);
+        }
+        
+        li {
+            margin-bottom: 10px;
+        }
+        
+        .csr-program, .references li, .csr-list li {
+            margin-bottom: 30px;
+            padding: 20px;
+            background-color: var(--light-bg);
+            border-radius: var(--border-radius);
+            transition: var(--transition);
+            border-left: 4px solid var(--primary-color);
+        }
+        
+        .csr-program:hover, .references li:hover, .csr-list li:hover {
+            background-color: white;
+            transform: translateX(5px);
+            box-shadow: var(--box-shadow);
+            border-left: 4px solid var(--secondary-color);
+        }
+        
+        .disclaimer {
+            background-color: #fff8f8;
+            padding: 30px;
+            border-radius: var(--border-radius);
+            margin-top: 40px;
+            border-left: 4px solid #ff6b6b;
+            box-shadow: var(--box-shadow);
+            transition: var(--transition);
+        }
+        
+        .disclaimer:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+        }
+        
+        /* Link Styling */
+        a {
+            color: var(--primary-color);
+            text-decoration: none;
+            transition: var(--transition);
+            position: relative;
+        }
+        
+        a:after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background-color: var(--secondary-color);
+            transition: var(--transition);
+        }
+        
+        a:hover {
+            color: var(--secondary-color);
+        }
+        
+        a:hover:after {
+            width: 100%;
+        }
+        
+        /* Additional Styling */
+        .text-right {
+            text-align: right;
+        }
+        
+        .source {
+            font-size: 14px;
+            color: var(--gray-text);
+            font-style: italic;
+            margin-top: 15px;
+        }
+        
+        /* Custom styling for specific sections */
+        #home {
+            --animation-order: 1;
+        }
+        
+        #background {
+            --animation-order: 2;
+        }
+        
+        #corporate-profile {
+            --animation-order: 3;
+        }
+        
+        #vision-mission {
+            --animation-order: 4;
+        }
+        
+        #branches {
+            --animation-order: 5;
+        }
+        
+        #scope {
+            --animation-order: 6;
+        }
+        
+        #products {
+            --animation-order: 7;
+        }
+        
+        #highlights {
+            --animation-order: 8;
+        }
+        
+        /* Elegant Info Boxes */
+        .info-box {
+            background-color: var(--light-bg);
+            padding: 30px;
+            border-radius: var(--border-radius);
+            margin: 30px 0;
+            box-shadow: var(--box-shadow);
+            position: relative;
+            overflow: hidden;
+            transition: var(--transition);
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+        
+        .info-box:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 100%;
+            background: var(--primary-color);
+            transition: var(--transition);
+        }
+        
+        .info-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+        }
+        
+        .info-box:hover:before {
+            background: var(--secondary-color);
+        }
+        
+        .info-box h4 {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .info-box h4 i {
+            margin-right: 10px;
+            color: var(--secondary-color);
+        }
+        
+        /* Scrollbar Styling */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary-color);
+            border-radius: 10px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--secondary-color);
+        }
+        
+        /* Animation for page load */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        body {
+            animation: fadeIn 1s ease-out;
+        }
+        
+        /* Responsive Design */
+        @media screen and (max-width: 1200px) {
+            .main-content {
+                padding: 40px 30px;
+            }
+        }
+        
+        @media screen and (max-width: 992px) {
+            .sidebar {
+                width: 240px;
+            }
+            
+            .main-content {
+                margin-left: 240px;
+            }
+            
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            h2 {
+                font-size: 1.8rem;
+            }
+        }
+        
+        @media screen and (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+                padding: 20px 0;
+            }
+            
+            .main-content {
+                margin-left: 0;
+                padding: 30px 20px;
+            }
+            
+            body {
+                flex-direction: column;
+            }
+            
+            section {
+                padding: 30px 20px;
+            }
+            
+            .profile-grid {
+                grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+                gap: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Left Navigation Sidebar -->
+    <div class="sidebar">
+        <div class="logo-container">
+            <img src="https://www.pds.com.ph/wp-content/uploads/2018/12/PNB-Logo-Short-YouFirst-011117-FC-HQ-1024x676.png" alt="PNB Logo" class="logo">
+            <h3>Philippine National Bank</h3>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="#home"><i class="fas fa-home"></i> Home</a></li>
+                <li><a href="#background"><i class="fas fa-history"></i> Background & History</a></li>
+                <li><a href="#corporate-profile"><i class="fas fa-building"></i> Corporate Profile</a></li>
+                <li><a href="#vision-mission"><i class="fas fa-eye"></i> Vision & Mission</a></li>
+                <li><a href="#branches"><i class="fas fa-map-marker-alt"></i> Branches & Offices</a></li>
+                <li><a href="#scope"><i class="fas fa-briefcase"></i> Scope of Business</a></li>
+                <li><a href="#products"><i class="fas fa-money-check-alt"></i> Products & Services</a></li>
+                <li><a href="#highlights"><i class="fas fa-chart-line"></i> Financial Highlights</a></li>
+                <li><a href="#awards"><i class="fas fa-award"></i> Awards & Recognition</a></li>
+                <li><a href="#structure"><i class="fas fa-sitemap"></i> Organizational Structure</a></li>
+                <li><a href="#board"><i class="fas fa-users"></i> Board of Directors</a></li>
+                <li><a href="#management"><i class="fas fa-user-tie"></i> Management Committee</a></li>
+                <li><a href="#capital"><i class="fas fa-coins"></i> Capital Structure</a></li>
+                <li><a href="#governance"><i class="fas fa-balance-scale"></i> Corporate Governance</a></li>
+                <li><a href="#csr"><i class="fas fa-hands-helping"></i> Corporate Social Responsibility</a></li>
+                <li><a href="#financial-reports"><i class="fas fa-file-invoice-dollar"></i> Financial Reports</a></li>
+                <li><a href="#team"><i class="fas fa-user-friends"></i> Our Team</a></li>
+                <li><a href="#references"><i class="fas fa-book"></i> References</a></li>
+                <li><a href="#disclaimer"><i class="fas fa-exclamation-circle"></i> Disclaimer</a></li>
+            </ul>
+        </nav>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Home Section -->
+        <section id="home">
+            <div class="hero-image">
+                <div class="placeholder-text">Banking Excellence Since 1916</div>
+            </div>
+            <h1>Philippine National Bank</h1>
+            <p class="tagline">You First</p>
+            <p>Welcome to the Philippine National Bank (PNB), one of the country's largest private universal banks in terms of assets and deposits. With over a century of banking excellence, we continue to serve the Filipino people with innovative financial solutions and world-class service.</p>
+        </section>
+
+        <!-- Background Section -->
+        <section id="background">
+            <h2>Background & History</h2>
+            <p>The Philippine National Bank (PNB) is one of the oldest and largest commercial banks in the Philippines. It was founded on July 22, 1916, as a government-owned bank with the primary purpose of serving the financing needs of the agricultural sector, helping to support the economic growth of the Philippines. Over the years, PNB evolved into a major financial institution, offering a wide range of banking services including corporate and retail banking, as well as international banking through its various subsidiaries.</p>
+            <p>PNB was privatized in 1996, and its ownership was transferred to private investors, although the government still maintains a significant stake. The bank's services have expanded significantly to include wealth management, insurance, remittance services, and more, positioning itself as one of the key players in the Philippine banking sector. It has an extensive network of branches across the country and around the world, with a presence in key global markets.</p>
+            <p><strong>Head Office Address:</strong> PNB Financial Center, Pres. Diosdado Macapagal Boulevard, Pasay City, Metro Manila, Philippines</p>
+            <p>This facility serves as the central hub for the bank's operations and management.</p>
+        </section>
+
+        <!-- Corporate Profile Section -->
+        <section id="corporate-profile">
+            <h2>Corporate Profile</h2>
+            <p>The Philippine National Bank (PNB) is one of the largest and most prominent financial institutions in the Philippines. With over a century of history, PNB has played a key role in the country's economic development and continues to be a major player in the Philippine banking industry. It offers a wide range of financial services including commercial banking, retail banking, investment banking, insurance, and more. Over the years, PNB has focused on providing innovative banking solutions and has significantly expanded its reach through various subsidiaries.</p>
+            
+            <h3>Core Services:</h3>
+            <ul>
+                <li><strong>Corporate Banking:</strong> Serving businesses with loans, trade finance, cash management, and other corporate banking services.</li>
+                <li><strong>Retail Banking:</strong> Offering savings accounts, checking accounts, consumer loans, credit cards, and other financial products to individuals.</li>
+                <li><strong>International Banking:</strong> Providing remittance services and facilitating banking needs for Filipinos abroad, with branches and subsidiaries in key international locations.</li>
+                <li><strong>Wealth Management:</strong> Offering financial planning, investment advisory, and asset management services to help clients manage their wealth.</li>
+            </ul>
+            
+            <h3>Key Subsidiaries:</h3>
+            <ul>
+                <li><strong>PNB Savings Bank</strong> – A wholly-owned subsidiary that focuses on providing retail banking services, including personal loans, savings products, and mortgages.</li>
+                <li><strong>PNB Life Insurance, Inc.</strong> – A subsidiary engaged in providing life insurance services, including health, retirement, and investment-linked insurance products.</li>
+                <li><strong>PNB Capital and Investment Corporation</strong> – An investment banking subsidiary that offers services in capital markets, mergers and acquisitions, and underwriting of corporate securities.</li>
+                <li><strong>PNB General Insurers Co., Inc.</strong> – A subsidiary offering non-life insurance products, such as property, casualty, and auto insurance.</li>
+                <li><strong>PNB Remittance</strong> – A specialized subsidiary that focuses on facilitating remittances for Overseas Filipino Workers (OFWs), with a network spanning across multiple countries.</li>
+                <li><strong>PNB Securities, Inc.</strong> – Engaged in stockbroking and securities trading, helping clients with their investment needs in the stock market.</li>
+                <li><strong>PNB Global Remittance & Financial Company (HK) Limited</strong></li>
+                <li><strong>PNB-IBJL Leasing and Finance Corporation</strong></li>
+                <li><strong>Japan-PNB Leasing and Finance Corporation</strong></li>
+                <li><strong>Allied Banking Corporation (Hong Kong) Limited</strong></li>
+            </ul>
+        </section>
+
+        <!-- Vision Mission Section -->
+        <section id="vision-mission">
+            <h2>Vision, Mission, Goals and Core Values</h2>
+            
+            <h3>Vision</h3>
+            <p>PNB aims to be the most trusted and preferred financial institution in the Philippines and globally, known for its innovative services, superior customer experience, and commitment to supporting national economic growth.</p>
+            
+            <h3>Mission</h3>
+            <p>PNB's mission is to provide comprehensive financial services, focusing on customer satisfaction and financial well-being. It strives to meet the needs of its customers through innovative products, accessible banking solutions, and excellent customer service. PNB also aims to contribute to the growth of the Philippine economy while delivering sustainable value for its stakeholders.</p>
+            
+            <h3>Goals and Objectives</h3>
+            <ul>
+                <li><strong>Customer-Centric Approach:</strong> PNB strives to continuously improve its customer service and ensure that the bank's products and services meet the evolving needs of its clients.</li>
+                <li><strong>Expansion and Market Leadership:</strong> PNB aims to strengthen its position as a leading bank in the Philippines and expand its global reach, particularly in international markets with large Filipino populations.</li>
+                <li><strong>Financial Stability and Growth:</strong> Ensuring consistent financial growth, profitability, and maintaining a stable balance sheet while focusing on sustainable business practices.</li>
+                <li><strong>Innovation and Technology Integration:</strong> Constantly upgrading its systems, services, and platforms to incorporate new technologies, ensuring a seamless and digital banking experience.</li>
+                <li><strong>Corporate Social Responsibility (CSR):</strong> Contributing to society and supporting various community programs, particularly in education, health, and environmental sustainability.</li>
+                <li><strong>Employee Development:</strong> Investing in employee training and fostering a positive work environment to develop a skilled and motivated workforce.</li>
+            </ul>
+            
+            <h3>Core Values</h3>
+            <ul>
+                <li><strong>Integrity:</strong> PNB upholds the highest standards of honesty and transparency in all its business operations and relationships with stakeholders.</li>
+                <li><strong>Customer Commitment:</strong> The bank is dedicated to meeting the diverse needs of its customers, ensuring that every transaction and interaction adds value to the customer's financial journey.</li>
+                <li><strong>Excellence:</strong> PNB strives for excellence in every aspect of its business, from service delivery to financial management, continuously seeking to improve and innovate.</li>
+                <li><strong>Teamwork:</strong> PNB encourages collaboration among its employees, fostering a team-oriented culture where collective goals are prioritized.</li>
+                <li><strong>Accountability:</strong> PNB holds itself responsible for its actions, decisions, and outcomes, ensuring trust and reliability in its operations.</li>
+                <li><strong>Sustainability:</strong> The bank is committed to sustainable growth, promoting environmental and social responsibility through its business practices.</li>
+                <li><strong>Innovation:</strong> Embracing change and exploring new ideas, PNB strives to continuously enhance its services through technology and innovation.</li>
+            </ul>
+        </section>
+
+        <!-- Branches Section -->
+        <section id="branches">
+            <h2>Branches and Offices</h2>
+            <p>PNB operates a vast network of branches and offices across the Philippines and internationally, ensuring accessibility to its diverse customer base. The bank's presence in key markets is designed to serve both local and global clients, particularly catering to the needs of Overseas Filipino Workers (OFWs) and businesses.</p>
+            
+            <h3>Domestic Branches</h3>
+            <p>PNB has an extensive network of branches and ATMs spread across the Philippines. With a presence in major cities and regional areas, it provides a wide range of banking services to individuals, businesses, and government entities. The bank's branches are located in key regions such as:</p>
+            <ul>
+                <li><strong>Metro Manila:</strong> A large number of PNB branches are located throughout Metro Manila, offering a range of banking services to cater to the capital's bustling economy.</li>
+                <li><strong>Luzon, Visayas, and Mindanao:</strong> PNB's branches cover a broad geographic area, with locations in both urban and rural areas, ensuring that banking services are accessible to Filipinos nationwide.</li>
+            </ul>
+            <p>PNB continues to expand its physical branch presence, providing customers with easy access to banking services like savings accounts, loan products, and investment services.</p>
+            
+            <h3>International Branches</h3>
+            <p>PNB has a strong international footprint with branches in key locations worldwide, particularly in countries with significant Filipino communities. These international offices offer services such as remittance, foreign exchange, and other banking solutions tailored to the needs of Filipinos abroad.</p>
+            <ul>
+                <li><strong>United States:</strong> PNB has branches in key U.S. cities, including New York, Los Angeles, and San Francisco, serving a large base of Filipino expatriates.</li>
+                <li><strong>Middle East:</strong> PNB operates in countries such as Saudi Arabia, UAE, and Qatar, catering to OFWs and businesses in these regions.</li>
+                <li><strong>Asia:</strong> PNB has branches in Hong Kong and Singapore, serving both Filipinos and local businesses.</li>
+                <li><strong>Other Countries:</strong> The bank also has a presence in other countries like Japan, the UK, and Canada, supporting the international remittance needs of Filipinos.</li>
+            </ul>
+            
+            <h3>PNB International Operations</h3>
+            <ul>
+                <li>PNB New York Branch (USA)</li>
+                <li>PNB Los Angeles Branch (USA)</li>
+                <li>PNB Hong Kong Branch</li>
+                <li>PNB Dubai Branch (UAE)</li>
+                <li>PNB Singapore Branch</li>
+                <li>PNB Tokyo Branch (Japan)</li>
+            </ul>
+            <p>These international branches primarily focus on providing remittance and banking services to Overseas Filipino Workers (OFWs) and their families back home, as well as businesses operating in those regions.</p>
+            
+            <h3>PNB Overseas Filipino Services</h3>
+            <p>PNB's international branches and remittance centers play a critical role in facilitating the easy transfer of money from OFWs to their families in the Philippines. These branches also offer the full range of banking services, such as personal accounts, loans, and foreign exchange.</p>
+            
+            <h3>PNB Online and Mobile Banking</h3>
+            <p>For even greater convenience, PNB offers a comprehensive online banking platform and mobile banking application, enabling customers to access their accounts, transfer funds, and manage their finances anytime, anywhere.</p>
+        </section>
+
+        <!-- Scope of Business Section -->
+        <section id="scope">
+            <h2>Scope of Business/Operation</h2>
+            <p>The Philippine National Bank (PNB) operates in a wide range of financial services, catering to various sectors, including individuals, businesses, government agencies, and international clients. Its operations encompass a full spectrum of banking services, and the scope of its business spans both domestic and international markets.</p>
+            
+            <h3>1. Retail Banking</h3>
+            <p>PNB provides a broad array of services to individual customers, including:</p>
+            <ul>
+                <li><strong>Depository Services:</strong> Offering savings accounts, checking accounts, time deposits, and other personal banking products.</li>
+                <li><strong>Consumer Loans:</strong> Providing personal loans, auto loans, home loans (mortgages), and other credit facilities to individual customers.</li>
+                <li><strong>Credit Cards:</strong> Issuing credit cards that offer benefits such as reward programs, cash back, and installment plans.</li>
+                <li><strong>Wealth Management:</strong> Offering services related to investments, insurance, retirement planning, and estate management.</li>
+            </ul>
+            
+            <h3>2. Corporate Banking</h3>
+            <p>PNB offers a wide range of services for businesses, from small and medium enterprises (SMEs) to large corporations. These services include:</p>
+            <ul>
+                <li><strong>Business Loans:</strong> Financing options for working capital, capital expenditures, and expansion projects for businesses of all sizes.</li>
+                <li><strong>Trade Finance:</strong> Assisting businesses in international trade with services such as letters of credit, trade financing, and foreign exchange.</li>
+                <li><strong>Treasury Services:</strong> Providing cash management services to businesses for efficient handling of funds, including payroll and collection services.</li>
+                <li><strong>Business Accounts:</strong> Offering checking accounts, savings accounts, and other products tailored for corporate clients.</li>
+                <li><strong>Corporate Insurance:</strong> Helping businesses with risk management through property, casualty, and liability insurance products.</li>
+            </ul>
+            
+            <h3>3. Investment Banking</h3>
+            <p>Through its subsidiary PNB Capital & Investment Corporation, PNB engages in investment banking activities, including:</p>
+            <ul>
+                <li><strong>Underwriting:</strong> Assisting businesses in issuing securities (stocks, bonds) to raise capital.</li>
+                <li><strong>Mergers and Acquisitions (M&A):</strong> Advising companies on mergers, acquisitions, and other corporate restructuring efforts.</li>
+                <li><strong>Capital Markets:</strong> Offering services related to the buying and selling of stocks, bonds, and other financial instruments in the capital markets.</li>
+            </ul>
+            
+            <h3>4. International Banking</h3>
+            <p>PNB has a strong international presence, offering services to both Overseas Filipino Workers (OFWs) and international businesses. The scope of PNB's international operations includes:</p>
+            <ul>
+                <li><strong>Remittance Services:</strong> Providing reliable and efficient remittance services for Filipinos working abroad, helping them send money to their families in the Philippines.</li>
+                <li><strong>Foreign Currency Exchange:</strong> Offering foreign exchange services for both individual and corporate clients, including money transfer and foreign currency trading.</li>
+                <li><strong>International Banking Services:</strong> Supporting businesses involved in cross-border transactions with trade finance, business loans, and global payment services.</li>
+                <li><strong>Overseas Branches:</strong> PNB operates in various key countries where there is a large Filipino diaspora, including the United States, Middle East, Hong Kong, and Singapore.</li>
+            </ul>
+            
+            <h3>5. Non-Life and Life Insurance</h3>
+            <p>PNB has several subsidiaries involved in insurance services:</p>
+            <ul>
+                <li><strong>PNB Life Insurance:</strong> Offers life insurance, health plans, and investment-linked insurance products.</li>
+                <li><strong>PNB General Insurers:</strong> Provides non-life insurance products, including property, casualty, automotive, and marine insurance.</li>
+            </ul>
+            
+            <h3>6. Digital Banking Services</h3>
+            <p>With the rise of technology and online banking, PNB has expanded its scope by offering digital banking services through:</p>
+            <ul>
+                <li><strong>Online Banking:</strong> Enabling customers to access and manage their accounts, transfer funds, pay bills, and perform other banking tasks online.</li>
+                <li><strong>Mobile Banking App:</strong> Providing a mobile app for easy access to banking services on smartphones and tablets, including features like fund transfers, bill payments, and mobile check deposits.</li>
+                <li><strong>ATM Network:</strong> Extensive ATMs nationwide and partnerships with other banks to provide easy access to cash withdrawals, balance inquiries, and other self-service banking functions.</li>
+            </ul>
+            
+            <h3>7. Trust and Asset Management</h3>
+            <p>PNB offers trust services through PNB Trust Banking Group, which provides wealth management and asset management services to individuals, corporations, and institutions. The bank offers:</p>
+            <ul>
+                <li><strong>Trust Funds:</strong> Investment options designed for specific financial goals, including retirement planning and estate management.</li>
+                <li><strong>Mutual Funds:</strong> PNB's asset management division provides a range of mutual funds that allow individuals and institutions to invest in various asset classes such as equities, fixed-income securities, and balanced funds.</li>
+            </ul>
+            
+            <h3>8. Government Banking Services</h3>
+            <p>PNB provides specialized services for government institutions, including:</p>
+            <ul>
+                <li><strong>Government Deposits:</strong> Managing government accounts and assisting in the disbursement of funds for government projects and operations.</li>
+                <li><strong>Public Sector Financing:</strong> Providing loans and financial products designed for government agencies, local government units (LGUs), and government-owned and controlled corporations (GOCCs).</li>
+            </ul>
+            
+            <h3>9. Corporate Social Responsibility (CSR)</h3>
+            <p>PNB actively participates in corporate social responsibility programs, contributing to various social, educational, environmental, and healthcare initiatives. Its CSR efforts are focused on:</p>
+            <ul>
+                <li><strong>Educational Programs:</strong> Supporting scholarship initiatives and providing educational assistance to students.</li>
+                <li><strong>Healthcare:</strong> Contributing to public health initiatives, including donations to hospitals and healthcare centers.</li>
+                <li><strong>Environment:</strong> Participating in projects aimed at environmental sustainability and conservation.</li>
+            </ul>
+        </section>
+
+        <!-- Products and Services Section -->
+        <section id="products">
+            <h2>Products and Services</h2>
+            <p>The Philippine National Bank (PNB) offers a wide range of financial products and services tailored to meet the needs of individuals, businesses, and government entities. These services are designed to provide convenience, financial growth, and stability for its diverse customer base.</p>
+            
+            <h3>1. Retail Banking Products and Services</h3>
+            <ul>
+                <li><strong>Savings Accounts:</strong> Basic savings accounts, with options like PNB Regular Savings, PNB e-Money Savings, and PNB High Yield Savings for different financial goals.</li>
+                <li><strong>Checking Accounts:</strong> Personal checking accounts for easy payments, withdrawals, and money management.</li>
+                <li><strong>Time Deposits:</strong> Fixed-term deposits with competitive interest rates.</li>
+                <li><strong>PNB Debit and Prepaid Cards:</strong> Debit cards for easy access to funds and prepaid cards for secure spending.</li>
+                <li><strong>PNB Credit Cards:</strong> A range of credit cards offering benefits like rewards points, cashback, and installment plans.</li>
+                <li><strong>Personal Loans:</strong> Unsecured loans for personal use, such as the PNB Personal Loan, which can be used for a variety of needs including education, travel, or home renovation.</li>
+                <li><strong>Home Loans:</strong> Financing options for purchasing or refinancing homes, including the PNB Home Loan and PNB Home Equity Loan.</li>
+                <li><strong>Auto Loans:</strong> Loans for purchasing new or used vehicles with flexible repayment options.</li>
+                <li><strong>Overseas Filipino Worker (OFW) Remittance Services:</strong> Easy and affordable ways for Filipinos abroad to send money back home.</li>
+            </ul>
+            
+            <h3>2. Business Banking Products and Services</h3>
+            <ul>
+                <li><strong>Business Loans:</strong> Financing for small, medium, and large enterprises (SMEs and corporations), including working capital loans, equipment financing, and business expansion loans.</li>
+                <li><strong>Trade Finance:</strong> Services to facilitate international trade, including letters of credit, trade loans, and foreign exchange.</li>
+                <li><strong>Corporate Deposits:</strong> Business accounts such as checking accounts, savings accounts, and current accounts designed for corporate clients.</li>
+                <li><strong>Cash Management Services:</strong> Solutions for streamlining cash flow, managing payments, collections, and payroll.</li>
+                <li><strong>Merchant Services:</strong> Point-of-sale (POS) solutions for businesses to accept payments via credit cards and other electronic methods.</li>
+                <li><strong>Payroll Services:</strong> Automated payroll solutions to efficiently manage employee compensation.</li>
+            </ul>
+            
+            <h3>3. Investment Banking Products and Services</h3>
+            <ul>
+                <li><strong>Investment Banking Advisory:</strong> Mergers and acquisitions (M&A), corporate restructuring, and capital raising solutions.</li>
+                <li><strong>Securities Trading:</strong> Buying and selling of stocks, bonds, and other securities through PNB Securities, Inc.</li>
+                <li><strong>Corporate Underwriting:</strong> Helping businesses raise capital through the issuance of stocks and bonds in capital markets.</li>
+                <li><strong>Funds Management:</strong> Investment options for institutional clients, including managed funds and portfolios.</li>
+            </ul>
+            
+            <h3>4. Insurance Products and Services</h3>
+            <h4>PNB Life Insurance:</h4>
+            <ul>
+                <li><strong>Life Insurance:</strong> A variety of life insurance products including term life, whole life, and endowment policies.</li>
+                <li><strong>Health Insurance:</strong> Comprehensive health insurance policies for individuals and families.</li>
+                <li><strong>Investment-Linked Insurance:</strong> Life insurance policies with investment options that combine protection and investment growth.</li>
+                <li><strong>Retirement Plans:</strong> Pension and annuity products designed to provide income after retirement.</li>
+            </ul>
+            
+            <h4>PNB General Insurance:</h4>
+            <ul>
+                <li><strong>Property Insurance:</strong> Protection for businesses and individuals against losses from fire, natural disasters, and other property-related risks.</li>
+                <li><strong>Motor Insurance:</strong> Auto insurance for vehicles against accidents, theft, and damage.</li>
+                <li><strong>Casualty Insurance:</strong> Coverage for liability risks such as accident insurance or public liability insurance.</li>
+                <li><strong>Marine and Cargo Insurance:</strong> Coverage for shipping and logistics, protecting goods in transit.</li>
+            </ul>
+            
+            <h3>5. Digital Banking Products and Services</h3>
+            <ul>
+                <li><strong>Online Banking:</strong> Secure access to accounts and services via the internet for fund transfers, bill payments, and account management.</li>
+                <li><strong>Mobile Banking App:</strong> A mobile application that allows users to manage their finances on the go, including features like fund transfers, bill payments, and mobile check deposit.</li>
+                <li><strong>PNB ATM Services:</strong> Access to a network of ATMs nationwide for withdrawals, balance inquiries, and other self-service banking functions.</li>
+                <li><strong>PNB Pay:</strong> A digital payment platform that allows users to send and receive money, pay bills, and make purchases via mobile phones.</li>
+                <li><strong>PNB e-Statements:</strong> Electronic statements that can be accessed online, reducing the need for paper statements.</li>
+            </ul>
+            
+            <h3>6. Treasury and Wealth Management Services</h3>
+            <ul>
+                <li><strong>Trust Services:</strong> Investment advisory and wealth management services, including trust funds and estate planning.</li>
+                <li><strong>PNB Mutual Funds:</strong> Investment options in diversified portfolios of stocks, bonds, and other assets.</li>
+                <li><strong>PNB Investment Products:</strong> Structured investment products offering different risk-return profiles for both individual and corporate clients.</li>
+                <li><strong>Bonds and Fixed Income Securities:</strong> Safe investment products like government bonds and corporate bonds to generate fixed returns.</li>
+                <li><strong>Forex Services:</strong> Currency exchange and foreign exchange trading for individuals and businesses engaged in international transactions.</li>
+            </ul>
+            
+            <h3>7. Government Banking Services</h3>
+            <ul>
+                <li><strong>Government Deposits:</strong> Accounts specifically designed for government agencies to manage their funds and operations.</li>
+                <li><strong>Government Loans and Financing:</strong> Loan products for government entities and local government units (LGUs) for public projects.</li>
+                <li><strong>Public Sector Services:</strong> Facilitating government transactions and providing financial support to public sector initiatives.</li>
+            </ul>
+            
+            <h3>8. Overseas Filipino Services</h3>
+            <ul>
+                <li><strong>OFW Loans:</strong> Personal and home loans specifically tailored for Overseas Filipino Workers, designed to cater to their unique financial needs.</li>
+                <li><strong>Remittance Services:</strong> Secure and fast money transfer services for OFWs to send remittances to their families back in the Philippines, available both online and in-person through PNB's global network.</li>
+            </ul>
+            
+            <h3>9. Other Services</h3>
+            <ul>
+                <li><strong>Foreign Exchange and Foreign Currency Accounts:</strong> Currency exchange services for individuals and businesses, as well as foreign currency accounts for clients who need to hold foreign currencies.</li>
+                <li><strong>PNB Remittance Centers:</strong> Providing remittance services for Filipinos abroad to send money through PNB's global network.</li>
+                <li><strong>Financial Planning and Investment Advisory:</strong> Offering personalized financial advice for individuals seeking to grow and protect their wealth.</li>
+            </ul>
+        </section>
+
+        <!-- Financial Highlights Section -->
+        <section id="highlights">
+            <h2>Operational/Financial Highlights</h2>
+            <p>As of April 2025, the latest financial and operational highlights of Philippine National Bank (PNB) are based on their Full Year 2023 Financial Report and 2024 Q1 disclosures submitted to regulatory authorities.</p>
+            
+            <h3>Financial Highlights (FY 2023)</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Financial Indicator</th>
+                        <th>2023</th>
+                        <th>Year-on-Year Change</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Net Income</td>
+                        <td>₱13.5 billion</td>
+                        <td>Up 22% from ₱11.1 billion in 2022</td>
+                    </tr>
+                    <tr>
+                        <td>Total Assets</td>
+                        <td>₱1.25 trillion</td>
+                        <td>Slight growth year-on-year</td>
+                    </tr>
+                    <tr>
+                        <td>Net Interest Income</td>
+                        <td>₱39.2 billion</td>
+                        <td>Boosted by higher loan volumes and increased asset yields</td>
+                    </tr>
+                    <tr>
+                        <td>Loans and Receivables (Net)</td>
+                        <td>₱645 billion</td>
+                        <td>Sustained growth from corporate and consumer loan segments</td>
+                    </tr>
+                    <tr>
+                        <td>Deposits</td>
+                        <td>₱925 billion</td>
+                        <td>Steady growth with a focus on low-cost CASA deposits</td>
+                    </tr>
+                    <tr>
+                        <td>Return on Equity (ROE)</td>
+                        <td>7.8%</td>
+                        <td>Higher profitability metrics due to operational efficiencies</td>
+                    </tr>
+                    <tr>
+                        <td>Capital Adequacy Ratio (CAR)</td>
+                        <td>15.3%</td>
+                        <td>Well above the BSP minimum of 10%, indicating strong capital health</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <h3>Operational Highlights (2024–Early 2025)</h3>
+            <ul>
+                <li><strong>Digital Initiatives:</strong> PNB enhanced its mobile banking app and digital onboarding platforms. As of Q1 2025, mobile transaction volume rose over 30% YoY.</li>
+                <li><strong>Branch Network:</strong> Rationalized to ~600 domestic branches; expanded ATM and agent banking services in remote areas.</li>
+                <li><strong>Sustainability & ESG Focus:</strong> Rolled out green financing products and integrated ESG assessments into credit evaluation.</li>
+                <li><strong>OFW and Remittance Business:</strong> Still a major player in the remittance space, servicing millions of overseas Filipinos via global tie-ups.</li>
+                <li><strong>Risk Management:</strong> Reduced NPL (Non-Performing Loans) ratio to 3.1% as of end-2023, from 4.2% in 2022.</li>
+            </ul>
+        </section>
+
+        <!-- Awards Section -->
+        <section id="awards">
+            <h2>Awards and Recognitions (Last 5 Years)</h2>
+            
+            <h3>2024</h3>
+            <ul>
+                <li><strong>Best Remittance Bank – Philippines</strong> - Global Banking and Finance Review<br>
+                Recognized for its leadership in overseas Filipino (OFW) remittances and global partnerships.</li>
+                
+                <li><strong>Outstanding Employer for Overseas Filipinos</strong> - POEA and OWWA<br>
+                Cited for continued financial service to migrant workers during geopolitical and economic shifts.</li>
+            </ul>
+            
+            <h3>2023</h3>
+            <ul>
+                <li><strong>Best Bank for Investment Services</strong> - Asiamoney<br>
+                For excellence in wealth management and corporate investment services.</li>
+                
+                <li><strong>Top 5 Bank in ESG Integration</strong> - Institute of Corporate Directors (ICD)<br>
+                Highlighted for improving environmental and governance risk frameworks.</li>
+            </ul>
+            
+            <h3>2022</h3>
+            <ul>
+                <li><strong>Best Digital Transformation Initiative – Philippines</strong> - The Asian Banker<br>
+                Recognized for the upgrade of the PNB Digital App and online loan platforms.</li>
+                
+                <li><strong>Most Innovative Banking Product</strong> - Philippine Quill Awards<br>
+                Awarded for the launch of PNB's mobile-based insurance and savings features.</li>
+            </ul>
+            
+            <h3>2021</h3>
+            <ul>
+                <li><strong>Top Employer in Banking Sector</strong> - HR Asia Awards<br>
+                For employee engagement, wellness programs, and pandemic response.</li>
+                
+                <li><strong>Best Remittance Bank</strong> - World Finance Awards<br>
+                Acknowledged again for global remittance reliability and trust.</li>
+            </ul>
+            
+            <h3>2020</h3>
+            <ul>
+                <li><strong>Bank of the Year – Philippines</strong> - The Banker (Financial Times)<br>
+                Recognized for strong performance and digital resilience during the COVID-19 pandemic.</li>
+                
+                <li><strong>Best Customer Service Bank</strong> - Global Business Outlook<br>
+                Highlighted for client service support during lockdowns and transitions.</li>
+            </ul>
+        </section>
+
+        <!-- Organizational Structure Section -->
+        <section id="structure">
+            <h2>Organizational Structure</h2>
+            <p>Below is the detailed organizational structure of Philippine National Bank (PNB) as of the latest available disclosures (2024), based on their official documents and corporate governance reports.</p>
+            
+            <h3>Board of Directors</h3>
+            <p>The Board of Directors oversees PNB's strategic direction, risk governance, and regulatory compliance. It consists of:</p>
+            <ul>
+                <li>Chairperson of the Board</li>
+                <li>Vice Chairperson</li>
+                <li>President and Chief Executive Officer (CEO) – also an Executive Director</li>
+                <li>Independent Directors – in compliance with SEC requirements</li>
+                <li>Non-Executive Directors</li>
+            </ul>
+            
+            <h3>Executive Management Committee</h3>
+            <p>This group handles the day-to-day operations and implementation of strategies:</p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Position</th>
+                        <th>Key Function</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>President and CEO</td>
+                        <td>Leads strategic execution, reports to the Board</td>
+                    </tr>
+                    <tr>
+                        <td>Chief Operating Officer (COO)</td>
+                        <td>Oversees operations and support services</td>
+                    </tr>
+                    <tr>
+                        <td>Chief Finance Officer (CFO)</td>
+                        <td>Handles financial strategy, reports, and investor relations</td>
+                    </tr>
+                    <tr>
+                        <td>Chief Risk Officer (CRO)</td>
+                        <td>Manages credit, market, operational, and enterprise risks</td>
+                    </tr>
+                    <tr>
+                        <td>Chief Compliance Officer</td>
+                        <td>Ensures regulatory compliance and anti-money laundering protocols</td>
+                    </tr>
+                    <tr>
+                        <td>Chief Audit Executive</td>
+                        <td>Oversees internal audit and risk assurance</td>
+                    </tr>
+                    <tr>
+                        <td>Chief Information Officer (CIO)</td>
+                        <td>Leads IT and digital transformation strategy</td>
+                    </tr>
+                    <tr>
+                        <td>Heads of Banking Groups</td>
+                        <td>For: Retail Banking, Corporate Banking, Treasury, Wealth Management, International Operations, etc.</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <h3>Banking Units and Support Divisions</h3>
+            <p>PNB's structure includes both functional divisions and line-of-business units:</p>
+            
+            <h4>Banking Units:</h4>
+            <ul>
+                <li>Retail Banking Group – branch banking, personal loans, deposits</li>
+                <li>Corporate Banking Group – large enterprises, structured finance</li>
+                <li>Global Filipino Banking Group – OFW remittance services</li>
+                <li>Treasury Group – investment and foreign exchange operations</li>
+                <li>Credit Management Group</li>
+            </ul>
+            
+            <h4>Support Units:</h4>
+            <ul>
+                <li>Human Resources Group</li>
+                <li>Legal and Corporate Affairs</li>
+                <li>IT and E-Banking Group</li>
+                <li>Customer Experience Management</li>
+                <li>Risk and Compliance Units</li>
+            </ul>
+            
+            <h3>Subsidiaries and Affiliates</h3>
+            <p>PNB also owns or partners with the following:</p>
+            <ul>
+                <li>PNB Savings Bank (now integrated)</li>
+                <li>PNB Capital and Investment Corp.</li>
+                <li>PNB Securities, Inc.</li>
+                <li>PNB General Insurers Co., Inc.</li>
+            </ul>
+        </section>
+
+        <!-- Board of Directors Section -->
+        <section id="board">
+            <h2>Board of Directors</h2>
+            <p>The following profiles represent the latest Board of Directors of Philippine National Bank (PNB) based on their 2023–2024 Corporate Governance Report and disclosures on PSE Edge. These individuals provide oversight and strategic direction for the bank.</p>
+            
+            <div class="profile-grid">
+                <div class="profile-card">
+                    <div class="profile-image" style="background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcREtPelCqCgQDBs0NBqPRY5xgEIftk30KBm1A&s');"></div>
+                    <div class="profile-info">
+                        <h4>Florido P. Casuela</h4>
+                        <p><strong>Position:</strong> Chairman of the Board</p>
+                        <ul>
+                            <li>Former President and COO of PNB</li>
+                            <li>Extensive experience in investment banking and treasury</li>
+                            <li>Former President of the Bankers Association of the Philippines (BAP)</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="profile-card">
+                    <div class="profile-image" style="background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQOypAjeQYHxcRTj_jlrrnf9k1kwDwpOH-1Qg&s');"></div>
+                    <div class="profile-info">
+                        <h4>Wick Veloso</h4>
+                        <p><strong>Position:</strong> Vice Chairman</p>
+                        <ul>
+                            <li>Also served as former PNB President & CEO</li>
+                            <li>Now President of the United Coconut Planters Bank (UCPB) post-merger leadership transition</li>
+                            <li>Deep background in capital markets and global banking</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                
+                
+                <div class="profile-card">
+                    <div class="profile-image" style="background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ5Bc5Bbolew-6fbJZyctVWQ2QyBvn6DbC8Mg&s');"></div>
+                    <div class="profile-info">
+                        <h4>Florentino M. Herrera III</h4>
+                        <p><strong>Position:</strong> Independent Director</p>
+                        <ul>
+                            <li>Lawyer and corporate governance advocate</li>
+                            <li>Previously served in senior legal roles in the banking sector</li>
+                            <li>Member of key board committees (Audit, Risk Oversight)</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="profile-card">
+                    <div class="profile-image" style="background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSqxQ6FKnI_itUNpxDlMjXhgQSlYuwF_Eh4uw&s');"></div>
+                    <div class="profile-info">
+                        <h4>Carol M. Ong-Castillo</h4>
+                        <p><strong>Position:</strong> Independent Director</p>
+                        <ul>
+                            <li>Financial management and audit expert</li>
+                            <li>Former CFO and Audit Committee member in top conglomerates</li>
+                            <li>Background in public accountancy</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="profile-card">
+                    <div class="profile-image" style="background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ-Lo0tVqwa-SwPr35yujZEY9Vc7dPwp_uUkw&s');"></div>
+                    <div class="profile-info">
+                        <h4>Ferdinand O. Benedict</h4>
+                        <p><strong>Position:</strong> Non-Executive Director</p>
+                        <ul>
+                            <li>Tied to major shareholder LT Group</li>
+                            <li>Experience in real estate, financial management, and industrial business oversight</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="profile-card">
+                    <div class="profile-image" style="background-image: url('https://wealthsec.com/wp-content/uploads/2019/11/WLS2.png');"></div>
+                    <div class="profile-info">
+                        <h4>Wilson L. Sy</h4>
+                        <p><strong>Position:</strong> Non-Executive Director</p>
+                        <ul>
+                            <li>Veteran of the Philippine capital markets</li>
+                            <li>Also sits on the boards of several listed companies</li>
+                            <li>Expert in securities and brokerage management</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="profile-card">
+                    <div class="profile-image" style="background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRknOJdRlv1VcQ-PP98NAmtsfj3Mw8BTlylYg&s');"></div>
+                    <div class="profile-info">
+                        <h4>Esther M. Santos</h4>
+                        <p><strong>Position:</strong> Independent Director</p>
+                        <ul>
+                            <li>Social development expert and head of PLDT-Smart Foundation</li>
+                            <li>Promotes ESG and CSR integration in banking</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="profile-card">
+                    <div class="profile-image" style="background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTGjIdcGX4mjKWQXn1nUiNpEdLHI511IvJspA&s');"></div>
+                    <div class="profile-info">
+                        <h4>Emmanuel G. Herbosa</h4>
+                        <p><strong>Position:</strong> Executive Director / President until 2023</p>
+                        <ul>
+                            <li>Led PNB through digital transformation and recovery post-COVID</li>
+                            <li>Background in development banking (DBP) and finance</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <h3>Board Committees</h3>
+            <p>Each director is part of one or more of the following committees:</p>
+            <ul>
+                <li>Audit Committee</li>
+                <li>Risk Oversight Committee</li>
+                <li>Corporate Governance Committee</li>
+                <li>Related Party Transactions Committee</li>
+                <li>Trust Committee</li>
+            </ul>
+        </section>
+
+        <!-- Management Committee Section -->
+        <section id="management">
+            <h2>Management Committee</h2>
+            <p>The following profiles represent the latest Management Committee (ManCom) of Philippine National Bank (PNB), based on PNB's 2023 Annual Report, official website, and corporate disclosures as of early 2024. The ManCom leads the bank's operations, strategy execution, and risk management.</p>
+            
+            <div class="profile-grid">
+                <div class="profile-card">
+                    <div class="profile-image" style="background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTu8dM2Eh04PwVYY0MxsYyXyB1ZybTjphWQRQ&s');"></div>
+                    <div class="profile-info">
+                        <h4>Florido P. Casuela</h4>
+                        <p><strong>Position:</strong> Officer-in-Charge / Acting President & CEO</p>
+                        <ul>
+                            <li>Former PNB President and COO</li>
+                            <li>Extensive experience in treasury, investment banking, and corporate finance</li>
+                            <li>Provides interim leadership while permanent CEO is being appointed</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="profile-card">
+                    <div class="profile-image" style="background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ5S_eFdcOn1W66LmtnDLmc4Rl_2bXdLuaVOQ&s');"></div>
+                    <div class="profile-info">
+                        <h4>Marvin G. Fausto</h4>
+                        <p><strong>Position:</strong> Chief Financial Officer (CFO)</p>
+                        <ul>
+                            <li>Formerly with BDO, ATR Asset Management, and Philam Life</li>
+                            <li>Heads finance strategy, planning, and investor relations</li>
+                            <li>Strong background in asset management and capital markets</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="profile-card">
+                    <div class="profile-image" style="background-image: url('https://images.gmanews.tv/webpics/2022/06/lilia_guillermo_2022_06_20_21_02_12.JPG');"></div>
+                    <div class="profile-info">
+                        <h4>Lilia B. Guillermo</h4>
+                        <p><strong>Position:</strong> Chief Compliance Officer</p>
+                        <ul>
+                            <li>Former BIR Assistant Commissioner and compliance expert</li>
+                            <li>Ensures regulatory adherence and AMLA compliance</li>
+                            <li>Involved in internal controls and ethical standards initiatives</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="profile-card">
+                    <div class="profile-image" style="background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ5DHKu_UzQfh15LkGEz6uKtYuqyvQK38waVQ&s');"></div>
+                    <div class="profile-info">
+                        <h4>Ferdinand Uy</h4>
+                        <p><strong>Position:</strong> Chief Risk Officer (CRO)</p>
+                        <ul>
+                            <li>Oversees credit, market, operational, and enterprise risks</li>
+                            <li>Formerly with major universal banks handling risk architecture</li>
+                            <li>Focused on strengthening PNB's risk governance</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="profile-card">
+                    <div class="profile-image" style="background-image: url('https://insiderph.com/uploads/articles/1743002342406_0ianfhjurse1ct4qolgw-867x617.webp');"></div>
+                    <div class="profile-info">
+                        <h4>Miguel Angelo R. Villa-Real</h4>
+                        <p><strong>Position:</strong> Head of Marketing & Communications</p>
+                        <ul>
+                            <li>Leads brand strategy, customer experience, and stakeholder engagement</li>
+                            <li>Experienced in banking PR, digital marketing, and customer insight programs</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="profile-card">
+                    <div class="profile-image" style="background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRyU9a_R6UJdyi7AHxIw_4vpxzYDx9Lrm2qOQ&s');"></div>
+                    <div class="profile-info">
+                        <h4>Israel E. Fernandez</h4>
+                        <p><strong>Position:</strong> Head of IT & E-Banking Group (CIO)</p>
+                        <ul>
+                            <li>Oversees digital transformation, cybersecurity, and IT infrastructure</li>
+                            <li>Leads initiatives for mobile banking and automation</li>
+                            <li>Former tech executive from multinational banks</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="profile-card">
+                    <div class="profile-image" style="background-image: url('https://media.licdn.com/dms/image/v2/D4D03AQF621r6utPxTg/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1709878945385?e=2147483647&v=beta&t=6Fu7WgW9b-FQfXIOphyAY1IehJh6C1hb3yDBE4cBmf4');"></div>
+                    <div class="profile-info">
+                        <h4>Marissa A. dela Cruz</h4>
+                        <p><strong>Position:</strong> Chief Audit Executive</p>
+                        <ul>
+                            <li>Heads internal audit group for risk assurance and governance validation</li>
+                            <li>Reports directly to the Audit Committee of the Board</li>
+                            <li>Strong experience in internal controls and fraud risk management</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="profile-card">
+                    <div class="profile-image" style="background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTzR4G8UbpCacf1Ep2c2244V3ZD8ygwsCMLYQ&s');"></div>
+                    <div class="profile-info">
+                        <h4>Noel Tuazon</h4>
+                        <p><strong>Position:</strong> EVP, Head of Corporate Banking Group</p>
+                        <ul>
+                            <li>Handles key client relationships and strategic commercial lending</li>
+                            <li>Specialist in structured finance, syndication, and infrastructure loans</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="profile-card">
+                    <div class="profile-image" style="background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQTHRWvrVbamg1ZNJXeo23OCa3wC2dZiARJBw&s');"></div>
+                    <div class="profile-info">
+                        <h4>Fe M. Amoroso</h4>
+                        <p><strong>Position:</strong> Head of Retail Banking Group</p>
+                        <ul>
+                            <li>Manages nationwide branch operations, deposits, and retail lending</li>
+                            <li>Oversees customer acquisition and digital retail strategies</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Capital Structure Section -->
+        <section id="capital">
+            <h2>Capital Structure and Adequacy</h2>
+            <p>The following represents PNB's Capital Structure and Capital Adequacy profile as of the latest available data (FY 2023 and early 2024), based on regulatory disclosures filed with the Bangko Sentral ng Pilipinas (BSP) and PSE Edge.</p>
+            
+            <h3>Capital Structure (as of December 31, 2023)</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Component</th>
+                        <th>Amount (PHP)</th>
+                        <th>Notes</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Authorized Capital</td>
+                        <td>₱70 billion</td>
+                        <td>Common shares</td>
+                    </tr>
+                    <tr>
+                        <td>Outstanding Capital</td>
+                        <td>₱52.8 billion</td>
+                        <td>Includes both common and preferred shares</td>
+                    </tr>
+                    <tr>
+                        <td>Common Equity Tier 1 (CET1) Capital</td>
+                        <td>₱104.5 billion</td>
+                        <td>Core capital (net of deductions)</td>
+                    </tr>
+                    <tr>
+                        <td>Total Tier 1 Capital</td>
+                        <td>₱104.5 billion</td>
+                        <td>No additional Tier 1 instruments issued</td>
+                    </tr>
+                    <tr>
+                        <td>Total Capital (including Tier 2)</td>
+                        <td>₱117.1 billion</td>
+                        <td>Includes subordinated debt, eligible reserves</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <h3>Capital Adequacy Ratios (CAR)</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Metric</th>
+                        <th>2023</th>
+                        <th>BSP Minimum Requirement</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>CET1 Ratio</td>
+                        <td>13.2%</td>
+                        <td>7.0%</td>
+                    </tr>
+                    <tr>
+                        <td>Tier 1 Capital Ratio</td>
+                        <td>13.2%</td>
+                        <td>8.5%</td>
+                    </tr>
+                    <tr>
+                        <td>Total Capital Adequacy Ratio</td>
+                        <td>15.3%</td>
+                        <td>10.0%</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p>PNB is well-capitalized, comfortably exceeding BSP's minimum thresholds. This ensures strong financial health and resilience against economic shocks.</p>
+            
+            <h3>Key Capital Instruments</h3>
+            <ul>
+                <li><strong>Common Shares</strong> – Traded publicly on the Philippine Stock Exchange (PSE: PNB)</li>
+                <li><strong>Preferred Shares</strong> – Used for capital structure flexibility</li>
+                <li><strong>Subordinated Notes/Bonds</strong> – Occasionally issued to boost Tier 2 capital</li>
+            </ul>
+            
+            <h3>Capital Management Strategy</h3>
+            <ul>
+                <li>Maintain adequate buffers above regulatory minimums</li>
+                <li>Optimize risk-weighted assets (RWA) through portfolio balancing</li>
+                <li>Retain earnings to support organic growth</li>
+                <li>Comply with Basel III requirements, including leverage and liquidity ratios</li>
+            </ul>
+        </section>
+
+        <!-- Corporate Governance Section -->
+        <section id="governance">
+            <h2>Corporate Governance</h2>
+            <p>PNB is committed to the highest standards of corporate governance to protect stakeholder interests, enhance shareholder value, and ensure sustainable growth.</p>
+            <p>The bank adheres to the corporate governance principles established by regulatory authorities including the Bangko Sentral ng Pilipinas, Securities and Exchange Commission, and Philippine Stock Exchange.</p>
+            
+            <h3>Access to Corporate Governance Information</h3>
+            <p>You can access detailed information about PNB's corporate governance through the following official channels:</p>
+            
+            <div style="background-color: #f5f5f5; padding: 20px; border-radius: 8px; margin: 20px 0;">
+                <h4>🔗 Official Corporate Governance Link (PNB Website):</h4>
+                <p><a href="https://www.pnb.com.ph/index.php/about-pnb/corporate-governance" target="_blank">https://www.pnb.com.ph/index.php/about-pnb/corporate-governance</a></p>
+                
+                <p>This page includes:</p>
+                <ul>
+                    <li>Board of Directors profile</li>
+                    <li>Code of Corporate Governance</li>
+                    <li>Annual Corporate Governance Reports</li>
+                    <li>Committee charters (Audit, Risk, Governance, etc.)</li>
+                    <li>Compliance structure and disclosures</li>
+                </ul>
+            </div>
+            
+            <div style="background-color: #f5f5f5; padding: 20px; border-radius: 8px; margin: 20px 0;">
+                <h4>🔗 PSE Edge Disclosures – Corporate Governance Section (PNB):</h4>
+                <p><a href="https://edge.pse.com.ph/companyInformation/form.do?cmpy_id=44" target="_blank">https://edge.pse.com.ph/companyInformation/form.do?cmpy_id=44</a></p>
+                
+                <p>Here you can find:</p>
+                <ul>
+                    <li>Manual on Corporate Governance</li>
+                    <li>Annual Corporate Governance Reports (ACGR)</li>
+                    <li>Board Committee memberships</li>
+                    <li>SEC-mandated filings</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- CSR Section -->
+        <section id="csr">
+            <h2>Corporate Social Responsibility</h2>
+            <p>PNB is committed to supporting communities and contributing to sustainable development through various corporate social responsibility (CSR) initiatives. The bank actively engages in programs that address social, environmental, and educational needs across the Philippines.</p>
+            
+            <h3>PNB's CSR Programs and Initiatives</h3>
+            
+            <div class="csr-program">
+                <h4>1. PNB Cares: Disaster Relief and Recovery Assistance</h4>
+                <p>PNB provides financial aid, essential goods, and logistical support during natural calamities like typhoons, earthquakes, and floods.</p>
+                <p><strong>Recent examples:</strong></p>
+                <ul>
+                    <li>Relief operations for victims of Typhoon Odette (2021) and Paeng (2022)</li>
+                    <li>Partnership with LGUs and NGOs for distribution of relief packs and temporary shelters</li>
+                </ul>
+            </div>
+            
+            <div class="csr-program">
+                <h4>2. Green Banking Initiatives</h4>
+                <p>Implementation of environment-friendly branch operations (solar panels, paperless banking, and energy-efficient equipment).</p>
+                <ul>
+                    <li>Launched Green Financing Products to support renewable energy and sustainable agriculture.</li>
+                    <li>Active participation in Earth Hour and internal energy-saving campaigns.</li>
+                </ul>
+            </div>
+            
+            <div class="csr-program">
+                <h4>3. Support for Education and Financial Literacy</h4>
+                <p>Conducts financial literacy seminars for students, MSMEs, OFWs, and cooperatives.</p>
+                <ul>
+                    <li>Collaborates with public schools and DepEd for learning tool donations and scholarships through PNB Foundation.</li>
+                    <li>Developed digital modules and webinars post-COVID to reach remote communities.</li>
+                </ul>
+            </div>
+            
+            <div class="csr-program">
+                <h4>4. Healthcare Support and Pandemic Response (PNB Cares COVID-19)</h4>
+                <p>Donated PPEs, sanitation supplies, and mobile testing booths to hospitals.</p>
+                <ul>
+                    <li>Provided free COVID-19 insurance and cash assistance to frontliners and affected employees.</li>
+                    <li>Launched mental wellness webinars and helplines for employees and their families.</li>
+                </ul>
+            </div>
+            
+            <div class="csr-program">
+                <h4>5. Employee Volunteerism and Tree-Planting Drives</h4>
+                <p>Regular tree-planting and coastal clean-up programs in coordination with DENR.</p>
+                <p><strong>Employee-led volunteer activities under "PNB Cares Day," including:</strong></p>
+                <ul>
+                    <li>Community feeding programs</li>
+                    <li>Donation drives (school kits, hygiene packs, etc.)</li>
+                    <li>Literacy visits to rural schools</li>
+                </ul>
+            </div>
+            
+            <p class="text-right"><a href="https://www.pnb.com.ph/index.php/pnb-corporate-sustainability?tpl=revamp" target="_blank">Learn more about PNB's Corporate Sustainability</a></p>
+        </section>
+
+        <!-- Financial Statement Reports Section -->
+        <section id="financial-reports">
+            <h2>Financial Statement Reports (Three Consecutive Years)</h2>
+            
+            <h3>2024 Financial Highlights</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Financial Indicator</th>
+                        <th>Amount/Value</th>
+                        <th>Year-on-Year Change</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>Net Income</td><td>₱21.2 billion</td><td>Up 18% from 2023</td></tr>
+                    <tr><td>Net Interest Income</td><td>₱49.3 billion</td><td>Up 11% year-on-year</td></tr>
+                    <tr><td>Net Interest Margin</td><td>4.5%</td><td>Improved from 4.23% in 2023</td></tr>
+                    <tr><td>Fee-Based Income</td><td>₱5.5 billion</td><td>Up 4% due to increased transaction volumes</td></tr>
+                    <tr><td>Total Assets</td><td>₱1.3 trillion</td><td>Up 4% year-on-year</td></tr>
+                    <tr><td>Return on Equity</td><td>10.39%</td><td>Improved from 9.95% in 2023</td></tr>
+                    <tr><td>Cost Efficiency Ratio</td><td>49.6%</td><td>Maintained from 2023</td></tr>
+                </tbody>
+            </table>
+            <p><strong>Key Drivers:</strong> Strong core income, improved margins, and prudent expense management.</p>
+            <p class="source">Source: <a href="https://manilastandard.net/business/314562368/pnbs-income-grew-18-to-p21-2b-in-2024.html" target="_blank">Manila Standard</a></p>
+            
+            <h3>2023 Financial Highlights</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Financial Indicator</th>
+                        <th>Amount/Value</th>
+                        <th>Year-on-Year Change</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>Net Income</td><td>₱17.97 billion</td><td>Up 55% from ₱11.6 billion in 2022</td></tr>
+                    <tr><td>Net Interest Income</td><td>₱44.4 billion</td><td>Up 19% year-on-year</td></tr>
+                    <tr><td>Net Interest Margin</td><td>4.23%</td><td>Improved from 3.61% in 2022</td></tr>
+                    <tr><td>Fee-Based Income</td><td>₱5.3 billion</td><td>Up 5% year-on-year</td></tr>
+                    <tr><td>Total Assets</td><td>₱1.25 trillion</td><td>Up 9% from 2022</td></tr>
+                    <tr><td>Return on Equity</td><td>9.95%</td><td>Improved from 7% in 2022</td></tr>
+                    <tr><td>Cost Efficiency Ratio</td><td>49.6%</td><td>Improved from 50.2% in 2022</td></tr>
+                </tbody>
+            </table>
+            <p><strong>Key Drivers:</strong> Growth in net interest income, increased fee-based income, and improved operational efficiency.</p>
+            <p class="source">Source: <a href="https://www.pnb.com.ph/index.php/investor-relations/annual-report" target="_blank">PNB 2023 Annual Report</a></p>
+            
+            <h3>2022 Financial Highlights</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Financial Indicator</th>
+                        <th>Amount/Value</th>
+                        <th>Year-on-Year Change</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>Net Income</td><td>₱11.6 billion</td><td>Down 63% from ₱31.69 billion in 2021*</td></tr>
+                    <tr><td>Net Interest Income</td><td>₱37.3 billion</td><td>Up 7% year-on-year</td></tr>
+                    <tr><td>Net Interest Margin</td><td>3.61%</td><td>Improved from 3.27% in 2021</td></tr>
+                    <tr><td>Fee-Based Income</td><td>₱5.57 billion</td><td>Up 5.3% year-on-year</td></tr>
+                    <tr><td>Total Assets</td><td>₱1.15 trillion</td><td>Down 4% from 2021</td></tr>
+                    <tr><td>Return on Equity</td><td>7%</td><td>Down from 19.98% in 2021*</td></tr>
+                    <tr><td>Capital Adequacy Ratio</td><td>15.38%</td><td>Well above regulatory minimum</td></tr>
+                    <tr><td>Common Equity Tier 1 Ratio</td><td>14.58%</td><td>Strong capital position</td></tr>
+                </tbody>
+            </table>
+            <p><strong>Key Drivers:</strong> Growth in core income and improved asset quality, offset by the absence of the previous year's one-off gain.</p>
+            <p><em>*The 2021 figure included a one-off gain of ₱33.6 billion from a property-for-share swap transaction.</em></p>
+            <p class="source">Sources: <a href="https://www.philstar.com/business/2023/03/17/2252224/pnb-income-drops-p116-billion-2022" target="_blank">Philstar</a>, <a href="https://www.pnb.com.ph/index.php/investor-relations/annual-report" target="_blank">PNB 2022 Annual Report</a></p>
+            
+            <div style="background-color: #f5f5f5; padding: 20px; border-radius: 8px; margin: 20px 0;">
+                <h4>📁 Accessing Official Reports</h4>
+                <p>You can download PNB's official annual reports and audited financial statements directly from their website:</p>
+                <p><a href="https://www.pnb.com.ph/index.php/investor-relations/annual-report" target="_blank">PNB Annual Reports</a></p>
+                <p>These reports include detailed financial statements, management discussions, and notes to the financial statements for each year.</p>
+            </div>
+        </section>
+
+        <!-- Team Section -->
+        <section id="team">
+            <h2>Our Team</h2>
+            <div class="profile-grid">
+                <div class="profile-card">
+                    <div class="profile-image" style="background-image: url('https://scontent.fceb8-1.fna.fbcdn.net/v/t39.30808-6/487749515_122215797788223816_6429774151199294228_n.jpg?_nc_cat=110&ccb=1-7&_nc_sid=a5f93a&_nc_eui2=AeHAbmbz8hD6AQYHH2jHbjBt_N-4_ZzcAw7837j9nNwDDnhqQ0duHkI_a9M-XhsmJrNSLbbWvPEj-5oUOV6mNlbA&_nc_ohc=6YL_QeFlbaAQ7kNvwGCOfZP&_nc_oc=Adki_ErmgtU5-FEQx46AFbEAAZFGNm4aJZlWpibO0BiBkSGY5FMnv7Ltyw5wv8w_Xo9XH0wQto4cPI8fvuYMDS4u&_nc_zt=23&_nc_ht=scontent.fceb8-1.fna&_nc_gid=KBLHtRphHWR1CuLT3UzHPA&oh=00_AfG8q84T5i-X4j4AAcUzP3uS2lfQpTBXtnVB2bPzjHyryQ&oe=680ED1E1');"></div>
+                    <div class="profile-info">
+                        <h4>John Mark Mabunga</h4>
+                        <p>BSBA STUDENT</p>
+                    </div>
+                </div>
+                <div class="profile-card">
+                    <div class="profile-image" style="background-image: url('https://scontent.fceb8-1.fna.fbcdn.net/v/t39.30808-6/476230694_1308561103515001_4015873331933897851_n.jpg?_nc_cat=100&ccb=1-7&_nc_sid=a5f93a&_nc_eui2=AeE3ZH-0sq1IcHyyG6WGDphiPSr4XZFcZus9KvhdkVxm61AOTof6leQwm3GoSgaZR1yCjPVHK9-dzNLmrP_X88hd&_nc_ohc=fT18vv5Qq_MQ7kNvwFTSpH1&_nc_oc=AdkI3zc4jYpy3dBY2rE1LfrCx7qX7U9zONfYfhMxDZ6tl9_432f8jbCRV9gYKMX98zLuN-7zNlvPCl1ximjp-Q42&_nc_zt=23&_nc_ht=scontent.fceb8-1.fna&_nc_gid=V2x2nbwz0XQ-Up04n6FbNA&oh=00_AfG8kuADknetAXi360F5Yly9IDlCmb5fpIw2MDwm8lZIbQ&oe=680EE879');"></div>
+                    <div class="profile-info">
+                        <h4>Jessa Mae Ayoon</h4>
+                        <p>BSBA STUDENT</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- References Section -->
+        <section id="references">
+            <h2>References</h2>
+            <ul class="references">
+                <li>Philippine National Bank Official Website. (2023). Retrieved from <a href="https://www.pnb.com.ph" target="_blank">https://www.pnb.com.ph</a></li>
+                <li>PNB Annual Report 2022. (2023). Philippine National Bank.</li>
+                <li>PNB Annual Report 2021. (2022). Philippine National Bank.</li>
+                <li>PNB Annual Report 2020. (2021). Philippine National Bank.</li>
+                <li>Bangko Sentral ng Pilipinas. (2023). List of Universal and Commercial Banks. Retrieved from <a href="https://www.bsp.gov.ph" target="_blank">https://www.bsp.gov.ph</a></li>
+                <li>Philippine Stock Exchange. (2023). PNB Company Information. Retrieved from <a href="https://www.pse.com.ph" target="_blank">https://www.pse.com.ph</a></li>
+                <li>SEC EDGE Portal. (2023). PNB Disclosures. Securities and Exchange Commission.</li>
+                <li>PNB Corporate Social Responsibility Report. (2022). Philippine National Bank.</li>
+            </ul>
+        </section>
+
+        <!-- Disclaimer Section -->
+        <section id="disclaimer" class="disclaimer">
+            <h2>Disclaimer</h2>
+            <p>This website has been created for educational purposes only. The information presented here about Philippine National Bank (PNB) is collected from publicly available sources and may not reflect the most current data or official positions of PNB.</p>
+            <p>This is not the official website of Philippine National Bank. For official information, please visit <a href="https://www.pnb.com.ph" target="_blank">https://www.pnb.com.ph</a>.</p>
+            <p>The creators of this website are not affiliated with, endorsed by, or in any way officially connected with Philippine National Bank or any of its subsidiaries or affiliates.</p>
+            <p>The financial data, organizational information, and other content presented here should not be relied upon for investment decisions or any other purposes.</p>
+        </section>
+    </div>
+
+    <script>
+        // Reveal animations on scroll
+        document.addEventListener('DOMContentLoaded', function() {
+            const sections = document.querySelectorAll('section');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.animationDelay = `${entry.target.dataset.order * 0.1}s`;
+                        entry.target.classList.add('show');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, {
+                threshold: 0.1
+            });
+            
+            sections.forEach(section => {
+                const order = getComputedStyle(section).getPropertyValue('--animation-order');
+                section.dataset.order = order || 1;
+                observer.observe(section);
+            });
+            
+            // Smooth scrolling for anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    const targetId = this.getAttribute('href');
+                    const targetSection = document.querySelector(targetId);
+                    
+                    if (targetSection) {
+                        window.scrollTo({
+                            top: targetSection.offsetTop - 50,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html> 
